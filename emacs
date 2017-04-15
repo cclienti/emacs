@@ -12,7 +12,7 @@
 (add-to-list 'load-path "~/.emacs.d/packages")
 
 ;; load speedbar
-(require 'speedbar)
+;;(require 'speedbar)
 
 ;; Pas d'antialiasing
 (setq mac-allow-anti-aliasing nil)
@@ -64,7 +64,7 @@
 ;;(global-set-key (kbd "<mouse-2>") 'x-clipboard-yank)
 
 ;; default tab size
-;;(setq default-tab-width 4)
+;; (setq default-tab-width 4)
 
 (global-set-key '[f5] 'align-regexp)
 
@@ -78,7 +78,7 @@
 (setq scroll-preserve-screen-position t)
 
 ;; Disable eldoc
-(global-eldoc-mode -1)
+; (global-eldoc-mode -1)
 
 ;;;========== Proxy =====================================================
 ;; (setq url-proxy-services
@@ -91,10 +91,8 @@
 (when (>= emacs-major-version 24)
   (require 'package)
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-						   ;;("marmalade" . "https://marmalade-repo.org/packages/")
-						   ("melpa" . "https://melpa.org/packages/")))
-  ;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-  ;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+			   ;;("marmalade" . "https://marmalade-repo.org/packages/")
+			   ("melpa" . "https://melpa.org/packages/")))
   (package-initialize))
 
 ;;;========== General color ==================================================
@@ -110,11 +108,15 @@
        (set-face-background 'region "SteelBlue")))
 
 ;;(add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
-(set-default-font "DejaVu Sans Mono-10:antialias=none")
-
 (setq frame-background-mode 'dark)
 
-;;========== Highlight indentation ===========================================
+;; Various font settings depending on computer names
+(if (equal system-name "fixe.home")
+    (set-default-font "DejaVu Sans Mono-9:antialias=none")
+  (set-default-font "DejaVu Sans Mono-10:antialias=none"))
+
+
+;;;========== Highlight indentation ===========================================
 (require 'highlight-indent-guides)
 (global-set-key '[f4] 'highlight-indent-guides-mode)
 ;;(setq highlight-indent-guides-method 'character)
@@ -139,16 +141,14 @@
 
 
 ;;;========= Yasnippet =========================================================
-;;(add-to-list 'load-path "~/.emacs.d/packages/yasnippet")
-;;(require 'yasnippet) ;; not yasnippet-bundle
-(yas-global-mode 1)
+(yas-global-mode -1)
 
 
 ;;;========= RST Mode ==========================================================
 (speedbar-add-supported-extension ".rst")
 (setq auto-mode-alist
-      (append '(("\\.rst$" . rst-mode)
-		("\\.rest$" . rst-mode)) auto-mode-alist))
+          (append '(("\\.rst$" . rst-mode)
+                                ("\\.rest$" . rst-mode)) auto-mode-alist))
 
 (defun rst-mode-hook-setting ()
   ;; (setq frame-background-mode 'dark)
@@ -161,15 +161,19 @@
 (speedbar-add-supported-extension ".txt")
 
 (add-hook 'text-mode-hook
-	  (lambda ()
-	    (setq-default ispell-program-name "hunspell")
-	    (flyspell-mode 1)
-	    (ispell-change-dictionary "english")
-	    (turn-on-auto-fill)
-	    (setq fill-column 120)))
+          (lambda ()
+                (setq-default ispell-program-name "aspell")
+            (flyspell-mode 1)
+            (ispell-change-dictionary "english")
+            (turn-on-auto-fill)
+            (setq fill-column 120)))
 
-(setq ispell-program-name "hunspell"          ; Use hunspell to correct mistakes
-      ispell-dictionary   "english") ; Default dictionary to use
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary   "english")
+(setq fill-column 120)
+
+(setq flyspell-issue-welcome-flag nil)
+(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
 
 ;;========= Make ==================================================
 (defun my-makefile-hook ()
@@ -182,8 +186,8 @@
 (require 'cmake-mode)
 (setq auto-mode-alist
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-		("\\.cmake\\'" . cmake-mode))
-	      auto-mode-alist))
+                ("\\.cmake\\'" . cmake-mode))
+              auto-mode-alist))
 (speedbar-add-supported-extension ".cmake")
 
 
@@ -192,8 +196,8 @@
 (speedbar-add-supported-extension ".yml")
 (speedbar-add-supported-extension ".yaml")
 (add-hook 'yaml-mode-hook
-	  '(lambda ()
-	     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+          '(lambda ()
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 
 ;;========= Verilog ================================================
@@ -266,32 +270,39 @@
 (package-initialize)
 (require 'rtags)
 (require 'company)
+(require 'flycheck-rtags)
 
-(setq rtags-autostart-diagnostics t)
-(rtags-diagnostics)
-(setq rtags-completions-enabled t)
-(push 'company-rtags company-backends)
-(global-company-mode)
+(defun rtags-c-mode-hook ()
+        (setq rtags-autostart-diagnostics t)
+        (rtags-diagnostics)
+        (setq rtags-completions-enabled t)
+        (push 'company-rtags company-backends)
+        (flycheck-select-checker 'rtags))
+
 (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
 (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
 (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
 
+(add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
+(add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
 
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
-							  (c++-mode  . javadoc)))
+                                                          (c++-mode  . javadoc)))
   (flyspell-prog-mode)
   (show-paren-mode 1)
   (setq highlight-indentation-offset 3)
   (setq c++-tab-always-indent 1)
   (setq c-indent-level 3)
   (setq tab-width 3)
-  (setq indent-tabs-mode t))
+  (setq indent-tabs-mode t)
+  (global-company-mode)
+  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+  (setq-local flycheck-check-syntax-automatically nil))
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
-(add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
-(add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
 
 
 ;;========= Smart tabs ==================================================
@@ -306,31 +317,31 @@
 
 (defadvice indent-according-to-mode (around smart-tabs activate)
   (let ((indent-tabs-mode indent-tabs-mode))
-	(if (memq indent-line-function
-			  '(indent-relative
-				indent-relative-maybe))
-		(setq indent-tabs-mode nil))
-	ad-do-it))
+        (if (memq indent-line-function
+                          '(indent-relative
+                                indent-relative-maybe))
+                (setq indent-tabs-mode nil))
+        ad-do-it))
 
 (defmacro smart-tabs-advice (function offset)
   `(progn
-	 (defvaralias ',offset 'tab-width)
-	 (defadvice ,function (around smart-tabs activate)
-	   (cond
-		(indent-tabs-mode
-		 (save-excursion
-		   (beginning-of-line)
-		   (while (looking-at "\t*\\( +\\)\t+")
-			 (replace-match "" nil nil nil 1)))
-		 (setq tab-width tab-width)
-		 (let ((tab-width fill-column)
-			   (,offset fill-column)
-			   (wstart (window-start)))
-		   (unwind-protect
-			   (progn ad-do-it)
-			 (set-window-start (selected-window) wstart))))
-		(t
-		 ad-do-it)))))
+         (defvaralias ',offset 'tab-width)
+         (defadvice ,function (around smart-tabs activate)
+           (cond
+                (indent-tabs-mode
+                 (save-excursion
+                   (beginning-of-line)
+                   (while (looking-at "\t*\\( +\\)\t+")
+                         (replace-match "" nil nil nil 1)))
+                 (setq tab-width tab-width)
+                 (let ((tab-width fill-column)
+                           (,offset fill-column)
+                           (wstart (window-start)))
+                   (unwind-protect
+                           (progn ad-do-it)
+                         (set-window-start (selected-window) wstart))))
+                (t
+                 ad-do-it)))))
 
 (smart-tabs-advice c-indent-line c-basic-offset)
 (smart-tabs-advice c-indent-region c-basic-offset)
@@ -363,25 +374,14 @@
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (python-guess-indent nil)
-  (python-indent 4)
-  (setq jedi:complete-on-dot t)
-  (flymake-mode t))
+  (python-indent 4))
 
-(require 'tramp) (condition-case nil (require 'tramp-sh) (error nil))
-
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-		       'flymake-create-temp-inplace))
-	   (local-file (file-relative-name
-                        temp-file
-			(file-name-directory buffer-file-name))))
-      (list "pychecker.sh" (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-	       '("\\.py\\'" flymake-pylint-init)))
+(setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 (add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook 'global-flycheck-mode)
 
 
 ;;======== sh-mode hook ============================================
@@ -421,22 +421,13 @@
 
 ;;======== dot-mode hook ============================================
 (speedbar-add-supported-extension ".dot")
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(setq markdown-command "markdown_py")
 
 ;;======== plantuml-mode hook =========================================
-;(require 'plantuml-mode)
-;(setq auto-mode-alist
-;      (append '(("\\.uml\\'" . plantuml-mode))
-;	      auto-mode-alist))
-;(speedbar-add-supported-extension ".uml")
+(speedbar-add-supported-extension ".uml")
 
 
 ;;======== scss-mode hook ===========================================
-;(speedbar-add-supported-extension ".scss")
-;(load "~/.emacs.d/packages/scss-mode.el")
-;(require 'scss-mode)
+(speedbar-add-supported-extension ".scss")
 
 
 ;;======== color in compilation buffer ==============================
@@ -450,9 +441,6 @@
                     :inherit nil)
 
 ;;======== Whitespace line trimmer =================================
-;;(load "~/.emacs.d/packages/ws-trim.el")
-;;(require 'ws-trim)
-;;(global-ws-trim-mode t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;;========= Upcase region and all matches ==========================
@@ -464,7 +452,7 @@
   (message "%s -> %s" to-upcase upcased)
   (goto-char 0)
   (while (search-forward to-upcase nil t) (replace-match upcased)))
-;;(global-set-key '[f6] 'upcase-region-and-matches)
+(global-set-key '[f6] 'upcase-region-and-matches)
 (put 'upcase-region 'disabled nil)
 
 
@@ -473,14 +461,14 @@
 ;; (require 'dbus)
 ;; (defun auctex-evince-inverse-sync (file linecol timestamp)
 ;;   (let ((buf (get-file-buffer (substring file 7)))
-;; 	(line (car linecol))
-;; 	(col (cadr linecol)))
+;;      (line (car linecol))
+;;      (col (cadr linecol)))
 ;;     (if (null buf)
-;; 	(message "Sorry, %s is not opened..." file)
+;;      (message "Sorry, %s is not opened..." file)
 ;;       (switch-to-buffer buf)
 ;;       (goto-line (car linecol))
 ;;       (unless (= col -1)
-;; 	(move-to-column col)))))
+;;      (move-to-column col)))))
 
 ;; (dbus-register-signal
 ;;  :session nil "/org/gnome/evince/Window/0"
@@ -488,14 +476,14 @@
 ;;  'auctex-evince-inverse-sync)
 
 ;; (add-hook 'LaTeX-mode-hook
-;; 	  (lambda ()
-;; 	    (TeX-PDF-mode 1)
-;; 	    (setq-default ispell-program-name "aspell")
-;; 	    (flyspell-mode 1)
-;; 	    (ispell-change-dictionary "english")
-;; 	    (turn-on-auto-fill)
-;; 	    (setq fill-column 120)
-;; 	    ))
+;;        (lambda ()
+;;          (TeX-PDF-mode 1)
+;;          (setq-default ispell-program-name "aspell")
+;;          (flyspell-mode 1)
+;;          (ispell-change-dictionary "english")
+;;          (turn-on-auto-fill)
+;;          (setq fill-column 120)
+;;          ))
 
 ;;========== Custom Set Var ==========================================
 (custom-set-variables
