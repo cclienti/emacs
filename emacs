@@ -279,16 +279,9 @@
         (push 'company-rtags company-backends)
         (flycheck-select-checker 'rtags))
 
-(define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
-
-(add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
-(add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
-
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
-                                                          (c++-mode  . javadoc)))
+			      (c++-mode  . javadoc)))
   (flyspell-prog-mode)
   (show-paren-mode 1)
   (setq highlight-indentation-offset 3)
@@ -300,9 +293,18 @@
   (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
   (setq-local flycheck-check-syntax-automatically nil))
 
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
+(add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
+(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
+(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+(define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
+(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
 
 
 ;;========= Smart tabs ==================================================
