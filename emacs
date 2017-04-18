@@ -495,7 +495,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-jedi helm-rtags flycheck-rtags company-rtags ac-rtags rtags markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar jedi highlight-indent-guides helm flycheck company cmake-mode))))
+    (glsl-mode company-jedi helm-rtags flycheck-rtags company-rtags ac-rtags markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar jedi highlight-indent-guides helm flycheck company cmake-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
