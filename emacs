@@ -113,7 +113,9 @@
 ;; Various font settings depending on computer names
 (if (equal system-name "fixe.home")
     (set-default-font "DejaVu Sans Mono-9:antialias=none")
-  (set-default-font "DejaVu Sans Mono-10:antialias=none"))
+  (if (equal system-name "laptop.home")
+      (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
+    (set-default-font "DejaVu Sans Mono-10:antialias=none")))
 
 
 ;;;========== Highlight indentation ===========================================
@@ -270,7 +272,7 @@
 (package-initialize)
 (require 'rtags)
 (require 'company)
-(require 'flycheck-rtags)
+;;(require 'flycheck-rtags)
 
 (defun rtags-c-mode-hook ()
         (setq rtags-autostart-diagnostics t)
@@ -289,14 +291,14 @@
   (setq c-indent-level 3)
   (setq tab-width 3)
   (setq indent-tabs-mode t)
-  (global-company-mode)
-  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-  (setq-local flycheck-check-syntax-automatically nil))
+  (global-company-mode))
+  ;;(setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+  ;;(setq-local flycheck-check-syntax-automatically nil))
 
 (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
 (add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
-(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
-(add-hook 'c-mode-common-hook 'global-flycheck-mode)
+;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
+;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
