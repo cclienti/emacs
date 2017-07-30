@@ -272,7 +272,7 @@
 (package-initialize)
 (require 'rtags)
 (require 'company)
-;;(require 'flycheck-rtags)
+(require 'flycheck-rtags)
 
 (defun rtags-c-mode-hook ()
         (setq rtags-autostart-diagnostics t)
@@ -291,9 +291,9 @@
   (setq c-indent-level 3)
   (setq tab-width 3)
   (setq indent-tabs-mode t)
-  (global-company-mode))
-  ;;(setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-  ;;(setq-local flycheck-check-syntax-automatically nil))
+  (global-company-mode)
+  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+  (setq-local flycheck-check-syntax-automatically nil))
 
 (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
 (add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
