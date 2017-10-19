@@ -111,7 +111,7 @@
 (setq frame-background-mode 'dark)
 
 ;; Various font settings depending on computer names
-(if (equal system-name "fixe.home")
+(if (equal system-name "fixe")
     (set-default-font "DejaVu Sans Mono-9:antialias=none")
   (if (equal system-name "laptop.home")
       (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
@@ -498,9 +498,3 @@
  '(package-selected-packages
    (quote
     (flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar jedi highlight-indent-guides helm company cmake-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
