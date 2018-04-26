@@ -1,9 +1,9 @@
 ;;========== General ==================================================
-;; Suppression du message d'accueil
+;; No startup message
 (setq inhibit-startup-message t)
 
 ;; Increase emacs eval depth buffer
-(setq max-lisp-eval-depth 10000)
+(setq max-lisp-eval-depth 20000)
 
 ;; window name
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
@@ -11,15 +11,10 @@
 ;; emacs mode dir
 (add-to-list 'load-path "~/.emacs.d/packages")
 
-;; load speedbar
-;;(require 'speedbar)
-
-;; Pas d'antialiasing
+;; No Antiliazing
 (setq mac-allow-anti-aliasing nil)
 
-;; Speed bar shortcut
-;;(add-hook 'speedbar-before-popup-hook (global-set-key '[f1] 'speedbar))
-;;(global-set-key '[f1] 'speedbar-get-focus)
+;; Change buffer
 (global-set-key [M-down] 'next-buffer)
 (global-set-key [M-up]  'previous-buffer)
 
@@ -40,6 +35,7 @@
 ;; display tabs
 (global-set-key '[f3] 'whitespace-mode)
 (setq whitespace-line-column 120)
+
 ;; display only tabs in whitespace-mode
 ;; side effect: it prevents the whitespace-cleanup to work properly
 ;;(setq whitespace-style '(tabs tab-mark)) ;turns on white space mode only for tabs
@@ -50,7 +46,7 @@
 ;; prevent emacs to create backup files
 (setq make-backup-files nil)
 
-;; pas de bip
+;; no bip
 (setq ring-bell-function 'ignore)
 
 ;; no scroll bar
@@ -63,9 +59,7 @@
 (setq mouse-drag-copy-region t)
 ;;(global-set-key (kbd "<mouse-2>") 'x-clipboard-yank)
 
-;; default tab size
-;; (setq default-tab-width 4)
-
+;; Align regex shortcut
 (global-set-key '[f5] 'align-regexp)
 
 ;; Disable compilation warning regarding
@@ -91,7 +85,6 @@
 (when (>= emacs-major-version 24)
   (require 'package)
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-			   ;;("marmalade" . "https://marmalade-repo.org/packages/")
 			   ("melpa" . "https://melpa.org/packages/")))
   (package-initialize))
 
@@ -107,7 +100,6 @@
        (set-face-foreground 'region "white")
        (set-face-background 'region "SteelBlue")))
 
-;;(add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
 (setq frame-background-mode 'dark)
 
 ;; Various font settings depending on computer names
@@ -126,6 +118,7 @@
 (set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
 (set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
 
+
 ;;;========= sr-speedbar =========================================================
 (require 'sr-speedbar)
 (setq sr-speedbar-right-side nil)
@@ -133,13 +126,6 @@
 (sr-speedbar-refresh-turn-off)
 (global-set-key '[f2] 'speedbar-toggle-show-all-files)
 (global-set-key '[f1] 'sr-speedbar-toggle)
-
-
-;;;========= minimap =========================================================
-;;(load "~/.emacs.d/packages/minimap.el")
-;;(require 'minimap)
-;;(setq minimap-window-location 'right)
-;;(global-set-key '[f4] 'minimap-mode)
 
 
 ;;;========= Yasnippet =========================================================
@@ -150,7 +136,7 @@
 (speedbar-add-supported-extension ".rst")
 (setq auto-mode-alist
           (append '(("\\.rst$" . rst-mode)
-                                ("\\.rest$" . rst-mode)) auto-mode-alist))
+		    ("\\.rest$" . rst-mode)) auto-mode-alist))
 
 (defun rst-mode-hook-setting ()
   ;; (setq frame-background-mode 'dark)
@@ -176,6 +162,7 @@
 
 (setq flyspell-issue-welcome-flag nil)
 (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
+
 
 ;;========= Make ==================================================
 (defun my-makefile-hook ()
@@ -254,17 +241,6 @@
 (speedbar-add-supported-extension ".qip")
 (speedbar-add-supported-extension ".sdc")
 
-;;========= GLSL ===================================================
-(autoload 'glsl-mode "glsl-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
-(speedbar-add-supported-extension ".glsl")
-(speedbar-add-supported-extension ".vert")
-(speedbar-add-supported-extension ".frag")
-(speedbar-add-supported-extension ".geom")
-
 
 ;;========= C/C++ ==================================================
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/rtags")
@@ -285,20 +261,18 @@
   (setq c-doc-comment-style '((c-mode    . javadoc)
 			      (c++-mode  . javadoc)))
   (flyspell-prog-mode)
+  (global-company-mode)
   (show-paren-mode 1)
   (setq highlight-indentation-offset 3)
   (setq c++-tab-always-indent 1)
   (setq c-indent-level 3)
   (setq tab-width 3)
   (setq indent-tabs-mode t)
-  (global-company-mode)
   (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
   (setq-local flycheck-check-syntax-automatically nil))
 
 (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
 (add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
-;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
-;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
@@ -307,6 +281,9 @@
 (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
 (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
 (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
+(define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
+(define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward))  ;; PgUp
+(define-key c-mode-base-map (kbd "<C-prev>") (function rtags-location-stack-backward)) ;; PgDown
 
 
 ;;========= Smart tabs ==================================================
@@ -350,6 +327,7 @@
 (smart-tabs-advice c-indent-line c-basic-offset)
 (smart-tabs-advice c-indent-region c-basic-offset)
 
+
 ;;======== Flex/Bison ==============================================
 (defun my-bison-hook ()
   (setq indent-tabs-mode nil)
@@ -390,8 +368,8 @@
 
 ;;======== sh-mode hook ============================================
 (defun my-sh-mode-hook ()
-  (setq tab-width 3)
-  (setq sh-basic-offset 3)
+  (setq tab-width 4)
+  (setq sh-basic-offset 4)
   (setq indent-tabs-mode nil))
 
 (add-hook 'sh-mode-hook 'my-sh-mode-hook)
@@ -400,8 +378,8 @@
 
 ;;======== tcl-mode hook ============================================
 (defun my-tcl-mode-hook ()
-  (setq tab-width 3)
-  (setq tcl-indent-level 3)
+  (setq tab-width 4)
+  (setq tcl-indent-level 4)
   (setq indent-tabs-mode nil))
 
 (add-hook 'tcl-mode-hook 'my-tcl-mode-hook)
@@ -423,8 +401,10 @@
 ;;======== css-mode hook ============================================
 (speedbar-add-supported-extension ".css")
 
+
 ;;======== dot-mode hook ============================================
 (speedbar-add-supported-extension ".dot")
+
 
 ;;======== plantuml-mode hook =========================================
 (speedbar-add-supported-extension ".uml")
@@ -444,8 +424,10 @@
 (set-face-attribute 'comint-highlight-prompt nil
                     :inherit nil)
 
+
 ;;======== Whitespace line trimmer =================================
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 
 ;;========= Upcase region and all matches ==========================
 (defun upcase-region-and-matches (start end)
@@ -497,4 +479,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar jedi highlight-indent-guides helm company cmake-mode))))
+    (realgud psvn cmake-ide flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar highlight-indent-guides helm company cmake-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
