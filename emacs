@@ -104,11 +104,10 @@
 
 ;; Various font settings depending on computer names
 (if (equal system-name "fixe")
-    (set-default-font "DejaVu Sans Mono-9:antialias=none")
+    (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
   (if (equal system-name "laptop.home")
       (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))
     (set-default-font "DejaVu Sans Mono-10:antialias=none")))
-
 
 ;;;========== Highlight indentation ===========================================
 (require 'highlight-indent-guides)
@@ -118,6 +117,31 @@
 (set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
 (set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
 
+
+;;;========== Undo Tree ===========================================
+(defun undo-tree-visualizer-update-linum (&rest args)
+    (linum-update undo-tree-visualizer-parent-buffer))
+(advice-add 'undo-tree-visualize-undo :after #'undo-tree-visualizer-update-linum)
+(advice-add 'undo-tree-visualize-redo :after #'undo-tree-visualizer-update-linum)
+(advice-add 'undo-tree-visualize-undo-to-x :after #'undo-tree-visualizer-update-linum)
+(advice-add 'undo-tree-visualize-redo-to-x :after #'undo-tree-visualizer-update-linum)
+(advice-add 'undo-tree-visualizer-mouse-set :after #'undo-tree-visualizer-update-linum)
+(advice-add 'undo-tree-visualizer-set :after #'undo-tree-visualizer-update-linum)
+
+
+;;;========== Hide Show ===========================================
+(load-library "hideshow")
+(global-set-key (kbd "C-+") 'hs-toggle-hiding)
+(global-set-key (kbd "C-=") 'hs-hide-level)
+(global-set-key (kbd "C-*") 'hs-show-all)
+(global-set-key (kbd "C-)") 'hs-toggle-selective-display)
+(add-hook 'c-mode-common-hook   'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook       'hs-minor-mode)
+(add-hook 'lisp-mode-hook       'hs-minor-mode)
+(add-hook 'perl-mode-hook       'hs-minor-mode)
+(add-hook 'sh-mode-hook         'hs-minor-mode)
+(add-hook 'verilog-mode-hook    'hs-minor-mode)
 
 ;;;========= sr-speedbar =========================================================
 (require 'sr-speedbar)
@@ -282,8 +306,8 @@
 (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
 (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
 (define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
+(define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
 (define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward))  ;; PgUp
-(define-key c-mode-base-map (kbd "<C-prev>") (function rtags-location-stack-backward)) ;; PgDown
 
 
 ;;========= Smart tabs ==================================================
@@ -385,6 +409,7 @@
 (add-hook 'tcl-mode-hook 'my-tcl-mode-hook)
 (speedbar-add-supported-extension ".tcl")
 
+
 ;;======= Perl mode =================================================
 (defalias 'perl-mode 'cperl-mode)
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
@@ -479,7 +504,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (realgud psvn cmake-ide flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar highlight-indent-guides helm company cmake-mode))))
+    (magit undo-tree realgud psvn cmake-ide flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar highlight-indent-guides helm company cmake-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
