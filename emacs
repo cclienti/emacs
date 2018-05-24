@@ -375,8 +375,19 @@
 
 
 ;;======== python-mode hook ========================================
+;; pycodestyle from https://github.com/piger/flycheck-pycodestyle
+(require 'flycheck)
+(flycheck-define-checker python-pycodestyle
+  "A Python syntax and style checker using pycodestyle (former pep8)."
+  :command ("pycodestyle" source-inplace)
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
+  :modes python-mode)
+(add-to-list 'flycheck-checkers 'python-pycodestyle)
+
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
+  (flycheck-mode)
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (python-guess-indent nil)
@@ -387,7 +398,6 @@
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 (add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'python-mode-hook 'global-flycheck-mode)
 
 
 ;;======== sh-mode hook ============================================
@@ -504,7 +514,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit undo-tree realgud psvn cmake-ide flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar highlight-indent-guides helm company cmake-mode))))
+    (jedi undo-tree realgud flycheck glsl-mode company-jedi markdown-mode dot-mode bison-mode yasnippet yaml-mode sr-speedbar highlight-indent-guides helm company cmake-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
