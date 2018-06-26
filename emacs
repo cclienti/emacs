@@ -9,6 +9,12 @@
 ;; Increase emacs eval depth buffer
 (setq max-lisp-eval-depth 20000)
 
+;; prevent emacs to create backup files
+(setq make-backup-files nil)
+
+;; Disable compilation warning regarding
+(setq byte-compile-warnings '(not free-vars))
+
 ;; window name
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
 
@@ -18,17 +24,6 @@
 ;; No Antiliazing
 (setq mac-allow-anti-aliasing nil)
 
-;; Change buffer
-(global-set-key [M-down] 'next-buffer)
-(global-set-key [M-up]  'previous-buffer)
-
-;; Comment region
-(global-set-key "\C-c c" 'comment-region)
-
-;; Rigid Indent region
-(global-set-key [M-left]  'indent-rigidly-left)
-(global-set-key [M-right] 'indent-rigidly-right)
-
 ;; linum except in speedbar
 ;;(setq linum-format " %4d \u2502 ")
 (setq linum-format " %4d | ")
@@ -37,19 +32,9 @@
 ;; column number
 (column-number-mode t)
 
-;; display tabs
-(global-set-key '[f3] 'whitespace-mode)
-(setq whitespace-line-column 120)
-
-;; display only tabs in whitespace-mode
-;; side effect: it prevents the whitespace-cleanup to work properly
-;;(setq whitespace-style '(tabs tab-mark)) ;turns on white space mode only for tabs
-
 ;; line wrap
+(setq whitespace-line-column 120)
 (set-fill-column 119)
-
-;; prevent emacs to create backup files
-(setq make-backup-files nil)
 
 ;; no bip
 (setq ring-bell-function 'ignore)
@@ -57,6 +42,45 @@
 ;; no scroll bar
 (scroll-bar-mode -1)
 
+;; default tab size
+(setq default-tab-width 4)
+
+;; Preserve screen position while scrolling to avoid weird problems
+(setq scroll-preserve-screen-position t)
+
+;; Default split direction (vertical)
+;;(setq split-width-threshold 0)
+;;(setq split-height-threshold nil)
+
+;; Disable eldoc
+(global-eldoc-mode -1)
+
+
+;;;========== Proxy =====================================================
+;; (setq url-proxy-services
+;;       '(("http"     . "http://localhost:3128")
+;;         ("https"    . "http://localhost:3128")
+;;         ("ftp"      . "http://localhost:3128")
+;;         ("no_proxy" . "^\\(localhost\\|10.*\\)")))
+
+
+;;;========== Packages ==================================================
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/")))
+  (package-initialize))
+
+(setq my-package-list 
+      '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
+        helm company company-jedi
+        dot-mode cmake-mode bison-mode markdown-mode glsl-mode yaml-mode protobuf-mode
+        ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
+
+(mapc #'package-install my-package-list)
+
+
+;;;========== Copy paste & mouse ===========================================
 ;; copy-paste to old default emacs option
 ;; http://www.emacswiki.org/emacs/CopyAndPaste
 (setq x-select-enable-clipboard t)
@@ -65,30 +89,27 @@
 ;;(global-set-key (kbd "<mouse-2>") 'x-clipboard-yank)
 (xterm-mouse-mode 1)
 
-;; default tab size
-(setq default-tab-width 4)
 
+;;;========== various shortcuts ============================================
+;; Comment region
+(global-set-key "\C-c c" 'comment-region)
+;; Change buffer
+(global-set-key [M-down] 'next-buffer)
+(global-set-key [M-up]  'previous-buffer)
+;; Rigid Indent region
+(global-set-key [M-left]  'indent-rigidly-left)
+(global-set-key [M-right] 'indent-rigidly-right)
+;; display tabs
+(global-set-key '[f3] 'whitespace-mode)
 ;; Align regex shortcut
 (global-set-key '[f5] 'align-regexp)
-
-;; Disable compilation warning regarding
-(setq byte-compile-warnings '(not free-vars ))
-
-;; Disable backup files
-(setq make-backup-files nil)
-
-;; Preserve screen position while scrolling to avoid weird problems
-(setq scroll-preserve-screen-position t)
-
-;; Disable eldoc
-; (global-eldoc-mode -1)
-
-;;;========== window resize =============================================
+;; window resize
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 (global-set-key (kbd "S-C-o") 'other-window)
+
 
 ;;;========== ediff =====================================================
 (setq ediff-window-setup-function (quote ediff-setup-windows-plain))
@@ -98,10 +119,10 @@
  '(ediff-odd-diff-B         ((t (:background "DimGray"))))
  '(ediff-odd-diff-C         ((t (:background "DimGray"))))
  '(ediff-even-diff-A        ((t (:background "DimGray"))))
- '(ediff-even-diff-Ancestor ((t (:background "DimGray"))))
- '(ediff-even-diff-B        ((t (:background "DimGray"))))
- '(ediff-even-diff-C        ((t (:background "DimGray"))))
-)
+ '(ediff-even-diff-Ancestor	((t (:background "DimGray"))))
+ '(ediff-even-diff-B		((t (:background "DimGray"))))
+ '(ediff-even-diff-C		((t (:background "DimGray"))))
+ )
 ;; '(ediff-current-diff-A        ((t (:background "DimGray"))))
 ;; '(ediff-current-diff-Ancestor ((t (:background "DimGray"))))
 ;; '(ediff-current-diff-B        ((t (:background "DimGray"))))
@@ -111,27 +132,6 @@
 ;; '(ediff-fine-diff-B        ((t (:background "DimGray"))))
 ;; '(ediff-fine-diff-C        ((t (:background "DimGray"))))
 
-;;;========== Proxy =====================================================
-;; (setq url-proxy-services
-;;       '(("http"     . "http://localhost:3128")
-;;         ("https"    . "http://localhost:3128")
-;;         ("ftp"      . "http://localhost:3128")
-;;         ("no_proxy" . "^\\(localhost\\|10.*\\)")))
-
-;;;========== Packages ==================================================
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")))
-  (package-initialize))
-
-(setq my-package-list
-      '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
-        helm company company-jedi
-        dot-mode cmake-mode bison-mode markdown-mode glsl-mode yaml-mode protobuf-mode
-        ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
-
-(mapc #'package-install my-package-list)
 
 ;;;========== General color ==================================================
 (cond (window-system
@@ -149,8 +149,8 @@
 
 ;; Various font settings depending on computer names
 (cond ((equal system-name "high-res")
-       (set-default-font "DejaVu Sans Mono-10:antialias=none"))
-      (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
+	   (set-default-font "DejaVu Sans Mono-9:antialias=none"))
+	  (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
 
 ;;;========== Highlight indentation ===========================================
 (require 'highlight-indent-guides)
@@ -162,8 +162,9 @@
 
 
 ;;;========== Undo Tree ===========================================
+(global-undo-tree-mode)
 (defun undo-tree-visualizer-update-linum (&rest args)
-    (linum-update undo-tree-visualizer-parent-buffer))
+  (linum-update undo-tree-visualizer-parent-buffer))
 (advice-add 'undo-tree-visualize-undo :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualize-redo :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualize-undo-to-x :after #'undo-tree-visualizer-update-linum)
@@ -186,6 +187,7 @@
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 (add-hook 'python-mode-hook     'hs-minor-mode)
 
+
 ;;;========= sr-speedbar =========================================================
 (require 'sr-speedbar)
 (setq sr-speedbar-right-side nil)
@@ -202,8 +204,8 @@
 ;;;========= RST Mode ==========================================================
 (speedbar-add-supported-extension ".rst")
 (setq auto-mode-alist
-          (append '(("\\.rst$" . rst-mode)
-                    ("\\.rest$" . rst-mode)) auto-mode-alist))
+	  (append '(("\\.rst$" . rst-mode)
+				("\\.rest$" . rst-mode)) auto-mode-alist))
 
 (defun rst-mode-hook-setting ()
   ;; (setq frame-background-mode 'dark)
@@ -251,7 +253,11 @@
 
 
 ;;========= C/C++ ==================================================
-(add-to-list 'load-path "/home/cclienti/local/share/emacs/site-lisp/rtags")
+(setq rtags-lisp-dir "/home/cclienti/local/share/emacs/site-lisp/rtags")
+(if (file-directory-p rtags-lisp-dir)
+	(add-to-list 'load-path rtags-lisp-dir)
+  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/rtags"))
+
 (require 'package)
 (package-initialize)
 (require 'rtags)
@@ -259,19 +265,19 @@
 (require 'flycheck-rtags)
 
 (defun rtags-c-mode-hook ()
-        (setq rtags-autostart-diagnostics t)
-        (rtags-diagnostics)
-        (setq rtags-completions-enabled t)
-        (push 'company-rtags company-backends)
-        (flycheck-select-checker 'rtags)
-	(setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-	(setq-local flycheck-check-syntax-automatically nil)
-	(define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-	(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-	(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
-	(define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
-	(define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
-	(define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward)))  ;; PgUp
+  (setq rtags-autostart-diagnostics t)
+  (rtags-diagnostics)
+  (setq rtags-completions-enabled t)
+  (push 'company-rtags company-backends)
+  (flycheck-select-checker 'rtags)
+  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+  (setq-local flycheck-check-syntax-automatically nil)
+  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+  (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
+  (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
+  (define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
+  (define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
+  (define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward)))  ;; PgUp
 
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
@@ -289,10 +295,22 @@
 
 (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
 (add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
+;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
+;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+
+;;========= Google Protobuf=========================================
+(speedbar-add-supported-extension ".proto")
+(defconst my-protobuf-style
+  '((c-basic-offset . 4)
+	(indent-tabs-mode . nil)))
+
+(add-hook 'protobuf-mode-hook
+		  (lambda () (c-add-style "my-style" my-protobuf-style t)))
 
 
 ;;======== Flex/Bison ==============================================
@@ -318,29 +336,21 @@
 
 
 ;;======== python-mode hook ========================================
-;; pycodestyle from https://github.com/piger/flycheck-pycodestyle
-(require 'flycheck)
-(flycheck-define-checker python-pycodestyle
-  "A Python syntax and style checker using pycodestyle (former pep8)."
-  :command ("pycodestyle" source-inplace)
-  :error-patterns
-  ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
-  :modes python-mode)
-(add-to-list 'flycheck-checkers 'python-pycodestyle)
+(require 'jedi)
 
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
   (flycheck-mode)
   (setq indent-tabs-mode nil)
-  (setq tab-width 4)
-  (python-guess-indent nil)
-  (python-indent 4))
-
-(setq jedi:setup-keys t)
-(setq jedi:complete-on-dot t)
+  (setq tab-width 4))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 (add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
+(define-key jedi-mode-map (kbd "<C-tab>") 'jedi:complete)
+(define-key jedi-mode-map (kbd "M-.") 'jedi:goto-definition)
+(define-key jedi-mode-map (kbd "M-,") 'jedi:goto-definition)
 
 
 ;;======== sh-mode hook ============================================
