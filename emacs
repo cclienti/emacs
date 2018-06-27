@@ -185,6 +185,7 @@
 (add-hook 'lisp-mode-hook       'hs-minor-mode)
 (add-hook 'perl-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
+(add-hook 'verilog-mode-hook    'hs-minor-mode)
 (add-hook 'python-mode-hook     'hs-minor-mode)
 
 
@@ -252,6 +253,62 @@
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 
+;;========= Verilog ================================================
+(setq verilog-mode-pkg-dir "~/.emacs.d/packages/verilog-mode.el")
+(if (not (file-exists-p verilog-mode-pkg-dir))
+	(url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
+
+(load verilog-mode-pkg-dir)
+(require 'verilog-mode)
+
+(autoload 'verilog-mode "verilog-mode" "Verilog mode" t )
+(add-to-list 'auto-mode-alist '("\\.[ds]?vh?\\'" . verilog-mode))
+
+(when (require 'pymacs nil 'noerror)
+  (eval-after-load "pymacs" '(add-to-list 'pymacs-load-path "~/.emacs.d/packages/svmodule"))
+  (pymacs-load "emacs" "svm-")
+  (global-set-key (kbd "M-p M-w") 'svm-copy-module)
+  (global-set-key (kbd "M-p M-r") 'svm-reverse-module)
+  (global-set-key (kbd "M-p M-m") 'svm-paste-as-module)
+  (global-set-key (kbd "M-p M-g") 'svm-paste-as-packages)
+  (global-set-key (kbd "M-p M-i") 'svm-paste-as-instance)
+  (global-set-key (kbd "M-p M-b") 'svm-paste-as-clockingblock)
+  (global-set-key (kbd "M-p M-c") 'svm-paste-as-parameters)
+  (global-set-key (kbd "M-p M-s") 'svm-paste-as-signals)
+  (global-set-key (kbd "M-p M-o") 'svm-paste-as-logic)
+  (global-set-key (kbd "M-p M-l") 'svm-paste-as-init-latch)
+  (global-set-key (kbd "M-p M-a") 'svm-paste-as-init-wire)
+  (global-set-key (kbd "M-p M-t") 'svm-paste-as-doc-table)
+  (global-set-key (kbd "M-p M-y") 'svm-paste-as-yaml)
+  (global-set-key (kbd "M-p M-x") 'svm-paste-as-pandaxml))
+
+(defun my-verilog-hook ()
+  (flyspell-prog-mode)
+  (setq indent-tabs-mode nil)
+  (setq highlight-indentation-offset 3)
+  (setq verilog-indent-level 3)
+  (setq verilog-indent-level-module 3)
+  (setq verilog-indent-level-declaration 3)
+  (setq verilog-indent-level-behavioral 3)
+  (setq verilog-indent-level-directive 0)
+  (setq verilog-case-indent 3)
+  (setq verilog-auto-lineup 'assignment)
+  (setq verilog-tab-always-indent t)
+  (setq verilog-auto-newline nil)
+  (setq verilog-auto-indent-on-newline nil)
+  (setq verilog-auto-endcomments nil)
+  (setq verilog-indent-begin-after-if nil))
+
+(add-hook 'verilog-mode-hook 'my-verilog-hook)
+
+(speedbar-add-supported-extension ".sv")
+(speedbar-add-supported-extension ".v")
+(speedbar-add-supported-extension ".do")
+(speedbar-add-supported-extension ".xml")
+(speedbar-add-supported-extension ".qip")
+(speedbar-add-supported-extension ".sdc")
+
+
 ;;========= C/C++ ==================================================
 (setq rtags-lisp-dir "/home/cclienti/local/share/emacs/site-lisp/rtags")
 (if (file-directory-p rtags-lisp-dir)
@@ -301,6 +358,48 @@
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+
+;;========= Smart tabs ==================================================
+(defadvice align (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+
+(defadvice align-regexp (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+
+(defadvice indent-relative (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+
+(defadvice indent-according-to-mode (around smart-tabs activate)
+  (let ((indent-tabs-mode indent-tabs-mode))
+        (if (memq indent-line-function
+                          '(indent-relative
+                                indent-relative-maybe))
+                (setq indent-tabs-mode nil))
+        ad-do-it))
+
+(defmacro smart-tabs-advice (function offset)
+  `(progn
+         (defvaralias ',offset 'tab-width)
+         (defadvice ,function (around smart-tabs activate)
+           (cond
+                (indent-tabs-mode
+                 (save-excursion
+                   (beginning-of-line)
+                   (while (looking-at "\t*\\( +\\)\t+")
+                         (replace-match "" nil nil nil 1)))
+                 (setq tab-width tab-width)
+                 (let ((tab-width fill-column)
+                           (,offset fill-column)
+                           (wstart (window-start)))
+                   (unwind-protect
+                           (progn ad-do-it)
+                         (set-window-start (selected-window) wstart))))
+                (t
+                 ad-do-it)))))
+
+(smart-tabs-advice c-indent-line c-basic-offset)
+(smart-tabs-advice c-indent-region c-basic-offset)
 
 
 ;;========= Google Protobuf=========================================
