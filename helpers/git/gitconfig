@@ -1,0 +1,8 @@
+[diff]
+    tool = ediff
+[difftool "ediff"]
+    cmd = emacs --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+[merge]
+	tool = ediff3
+[mergetool "ediff3"]
+	cmd = emacs  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
