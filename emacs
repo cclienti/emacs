@@ -13,6 +13,7 @@
 
 ;; Prevent emacs to create backup files
 (setq make-backup-files nil)
+(setq auto-save-default nil)
 
 ;; Disable compilation warning regarding free vars
 (setq byte-compile-warnings '(not free-vars))
