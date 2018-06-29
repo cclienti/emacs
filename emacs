@@ -27,8 +27,8 @@
 ;; Linum except in speedbar
 ;;(setq linum-format " %4d \u2502 ")
 (setq linum-format " %4d | ")
-(add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (global-linum-mode t)
+(add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
 
 ;; Column number
 (column-number-mode t)
