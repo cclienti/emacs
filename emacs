@@ -27,6 +27,7 @@
 ;;(setq linum-format " %4d \u2502 ")
 (setq linum-format " %4d | ")
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
+(global-linum-mode t)
 
 ;; Column number
 (column-number-mode t)
