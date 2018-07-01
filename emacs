@@ -1,6 +1,8 @@
 ;;========== General ==================================================
 ;; Move custom into a separate file
-(setq custom-file "~/.custom.el")
+(defconst custom-file (expand-file-name "custom.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
 (load custom-file)
 
 ;; No startup message
@@ -9,51 +11,43 @@
 ;; Increase emacs eval depth buffer
 (setq max-lisp-eval-depth 20000)
 
-;; prevent emacs to create backup files
+;; Prevent emacs to create backup files
 (setq make-backup-files nil)
+(setq auto-save-default nil)
 
-;; Disable compilation warning regarding
+;; Disable compilation warning regarding free vars
 (setq byte-compile-warnings '(not free-vars))
 
 ;; window name
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
 
-;; emacs mode dir
-(add-to-list 'load-path "~/.emacs.d/packages")
-
 ;; No Antiliazing
 (setq mac-allow-anti-aliasing nil)
 
-;; linum except in speedbar
+;; Linum except in speedbar
 ;;(setq linum-format " %4d \u2502 ")
 (setq linum-format " %4d | ")
-(add-hook 'find-file-hook (lambda () (linum-mode 1)))
+(global-linum-mode t)
+(add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
 
-;; column number
+;; Column number
 (column-number-mode t)
 
-;; line wrap
+;; Line wrap
 (setq whitespace-line-column 120)
 (set-fill-column 119)
 
-;; no bip
+;; No bip
 (setq ring-bell-function 'ignore)
 
-;; no scroll bar
+;; No scroll bar
 (scroll-bar-mode -1)
-
-;; default tab size
-(setq default-tab-width 4)
 
 ;; Preserve screen position while scrolling to avoid weird problems
 (setq scroll-preserve-screen-position t)
 
-;; Default split direction (vertical)
-;;(setq split-width-threshold 0)
-;;(setq split-height-threshold nil)
-
-;; Disable eldoc
-(global-eldoc-mode -1)
+;; default tab size
+(setq default-tab-width 4)
 
 
 ;;;========== Proxy =====================================================
@@ -65,13 +59,24 @@
 
 
 ;;;========== Packages ==================================================
+;; Define package repository
 (when (>= emacs-major-version 24)
   (require 'package)
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                            ("melpa" . "https://melpa.org/packages/")))
   (package-initialize))
 
-(setq my-package-list 
+;; user emacs package dir
+(defconst my-emacs-pkg-dir (expand-file-name "packages" user-emacs-directory))
+(unless (file-directory-p my-emacs-pkg-dir)
+  (message "Creating emacs package dir %s" my-emacs-pkg-dir)
+  (package-refresh-contents)
+  (make-directory my-emacs-pkg-dir t))
+
+(add-to-list 'load-path my-emacs-pkg-dir)
+
+;; Automatically download packages
+(setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
         helm company company-jedi
         dot-mode cmake-mode bison-mode markdown-mode glsl-mode yaml-mode protobuf-mode
@@ -254,9 +259,10 @@
 
 
 ;;========= Verilog ================================================
-(setq verilog-mode-pkg-dir "~/.emacs.d/packages/verilog-mode.el")
-(if (not (file-exists-p verilog-mode-pkg-dir))
-	(url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
+(setq verilog-mode-pkg-dir
+	  (concat (file-name-as-directory my-emacs-pkg-dir) "verilog-mode.el"))
+(unless (file-exists-p verilog-mode-pkg-dir)
+  (url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
 
 (load verilog-mode-pkg-dir)
 (require 'verilog-mode)
@@ -314,27 +320,28 @@
 (if (file-directory-p rtags-lisp-dir)
 	(add-to-list 'load-path rtags-lisp-dir)
   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/rtags"))
-
-(require 'package)
 (package-initialize)
-(require 'rtags)
-(require 'company)
-(require 'flycheck-rtags)
 
-(defun rtags-c-mode-hook ()
-  (setq rtags-autostart-diagnostics t)
-  (rtags-diagnostics)
-  (setq rtags-completions-enabled t)
-  (push 'company-rtags company-backends)
-  (flycheck-select-checker 'rtags)
-  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-  (setq-local flycheck-check-syntax-automatically nil)
-  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-  (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-  (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
-  (define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
-  (define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
-  (define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward)))  ;; PgUp
+(when (require 'rtags nil 'noerror)
+  (require 'company)
+  (require 'flycheck-rtags)
+  (defun rtags-c-mode-hook ()
+	(setq rtags-autostart-diagnostics t)
+	(rtags-diagnostics)
+	(setq rtags-completions-enabled t)
+	(push 'company-rtags company-backends)
+	(flycheck-select-checker 'rtags)
+	(setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+	(setq-local flycheck-check-syntax-automatically nil)
+	(define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+	(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
+	(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
+	(define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
+	(define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
+	(define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward)))  ;; PgUp
+
+  (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
+  (add-hook 'c-mode-common-hook 'rtags-c-mode-hook))
 
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
@@ -350,8 +357,6 @@
   (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
   (setq-local flycheck-check-syntax-automatically nil))
 
-(add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
-(add-hook 'c-mode-common-hook 'rtags-c-mode-hook)
 ;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
 ;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
