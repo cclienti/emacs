@@ -180,10 +180,9 @@
 
 ;;;========== Hide Show ===========================================
 (load-library "hideshow")
-(global-set-key (kbd "C-+") 'hs-toggle-hiding)
-(global-set-key (kbd "C-=") 'hs-hide-level)
-(global-set-key (kbd "C-*") 'hs-show-all)
-(global-set-key (kbd "C-)") 'hs-toggle-selective-display)
+(global-set-key (kbd "M-+") 'hs-toggle-hiding)
+(global-set-key (kbd "M-=") 'hs-hide-level)
+(global-set-key (kbd "M-*") 'hs-show-all)
 (add-hook 'c-mode-common-hook   'hs-minor-mode)
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 (add-hook 'java-mode-hook       'hs-minor-mode)
@@ -337,8 +336,8 @@
 	(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
 	(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
 	(define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
-	(define-key c-mode-base-map (kbd "<C-prior>") (function rtags-location-stack-back)) ;; PgDown
-	(define-key c-mode-base-map (kbd "<C-next>") (function rtags-location-stack-forward)))  ;; PgUp
+	(define-key c-mode-base-map (kbd "<M-prior>") (function rtags-location-stack-back)) ;; PgDown
+	(define-key c-mode-base-map (kbd "<M-next>") (function rtags-location-stack-forward)))  ;; PgUp
 
   (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
   (add-hook 'c-mode-common-hook 'rtags-c-mode-hook))
