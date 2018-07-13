@@ -353,8 +353,9 @@
   (setq c-indent-level 3)
   (setq tab-width 3)
   (setq indent-tabs-mode t)
-  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-  (setq-local flycheck-check-syntax-automatically nil))
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'brace-list-open 0))
 
 ;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
 ;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
