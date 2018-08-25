@@ -197,6 +197,7 @@
 (require 'sr-speedbar)
 (setq sr-speedbar-right-side nil)
 (setq speedbar-use-images nil) ; use text for buttons
+(setq sr-speedbar-skip-other-window-p t)
 (sr-speedbar-refresh-turn-off)
 (global-set-key '[f2] 'speedbar-toggle-show-all-files)
 (global-set-key '[f1] 'sr-speedbar-toggle)
