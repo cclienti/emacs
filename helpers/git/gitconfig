@@ -1,3 +1,11 @@
+[rerere]
+    enabled = true
+[transfer]
+    fsckObjects = true
+[fetch]
+    fsckObjects = true
+[receive]
+    fsckObjects = true
 [diff]
     tool = ediff
 [difftool "ediff"]
