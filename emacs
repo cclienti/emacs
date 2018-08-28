@@ -49,6 +49,9 @@
 ;; default tab size
 (setq default-tab-width 4)
 
+;; default frame size
+(add-to-list 'default-frame-alist '(height . 60))
+(add-to-list 'default-frame-alist '(width . 160))
 
 ;;;========== Proxy =====================================================
 ;; (setq url-proxy-services
