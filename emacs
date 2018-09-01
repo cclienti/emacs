@@ -25,8 +25,7 @@
 (setq mac-allow-anti-aliasing nil)
 
 ;; Linum except in speedbar
-;;(setq linum-format " %4d \u2502 ")
-(setq linum-format " %4d | ")
+(setq linum-format " %5d \u2502 ")
 (global-linum-mode t)
 (add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
 
