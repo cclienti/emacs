@@ -53,11 +53,16 @@
 (add-to-list 'default-frame-alist '(width . 160))
 
 ;;;========== Proxy =====================================================
-;; (setq url-proxy-services
-;;       '(("http"     . "http://localhost:3128")
-;;         ("https"    . "http://localhost:3128")
-;;         ("ftp"      . "http://localhost:3128")
-;;         ("no_proxy" . "^\\(localhost\\|10.*\\)")))
+;; The url-proxy-services already manages http_proxy env variable.
+;; The following is not necessary.
+;;
+;; (defconst proxy-value (getenv "http_proxy") "proxy environment value")
+;; (if proxy-value
+;; 	(progn (message "setting proxy to: %s" proxy-value)
+;; 		   (setq url-proxy-services
+;; 				 '(("http"     . proxy-value)
+;; 				   ("https"    . proxy-value)
+;; 				   ("ftp"      . proxy-value)))))
 
 
 ;;;========== Packages ==================================================
