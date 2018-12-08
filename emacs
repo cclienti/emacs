@@ -69,8 +69,8 @@
 ;; Define package repository
 (when (>= emacs-major-version 24)
   (require 'package)
-  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")))
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "http://melpa.org/packages/")))
   (package-initialize))
 
 ;; user emacs package dir
@@ -202,9 +202,9 @@
 
 ;;;========= sr-speedbar =========================================================
 (require 'sr-speedbar)
-(setq sr-speedbar-right-side nil)
+;;(setq sr-speedbar-right-side nil)
 (setq speedbar-use-images nil) ; use text for buttons
-(setq sr-speedbar-skip-other-window-p t)
+;;(setq sr-speedbar-skip-other-window-p t)
 (sr-speedbar-refresh-turn-off)
 (global-set-key '[f2] 'speedbar-toggle-show-all-files)
 (global-set-key '[f1] 'sr-speedbar-toggle)
