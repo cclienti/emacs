@@ -184,6 +184,8 @@
 (advice-add 'undo-tree-visualizer-mouse-set :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualizer-set :after #'undo-tree-visualizer-update-linum)
 
+;;;========== Magit ===============================================
+(add-hook 'git-commit-mode-hook (lambda () (setq fill-column 72)))
 
 ;;;========== Hide Show ===========================================
 (load-library "hideshow")
