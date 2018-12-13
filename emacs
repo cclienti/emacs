@@ -86,7 +86,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
         helm company company-jedi
-        dot-mode cmake-mode bison-mode markdown-mode glsl-mode yaml-mode protobuf-mode
+        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
         ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
 (mapc #'package-install my-package-list)
