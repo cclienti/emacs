@@ -49,8 +49,8 @@
 (setq default-tab-width 4)
 
 ;; default frame size
-(add-to-list 'default-frame-alist '(height . 60))
-(add-to-list 'default-frame-alist '(width . 160))
+;;(add-to-list 'default-frame-alist '(height . 60))
+(add-to-list 'default-frame-alist '(width . 120))
 
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
@@ -86,7 +86,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
         helm company company-jedi
-        dot-mode cmake-mode bison-mode markdown-mode glsl-mode yaml-mode protobuf-mode
+        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
         ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
 (mapc #'package-install my-package-list)
@@ -184,6 +184,8 @@
 (advice-add 'undo-tree-visualizer-mouse-set :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualizer-set :after #'undo-tree-visualizer-update-linum)
 
+;;;========== Magit ===============================================
+(add-hook 'git-commit-mode-hook (lambda () (setq fill-column 72)))
 
 ;;;========== Hide Show ===========================================
 (load-library "hideshow")
