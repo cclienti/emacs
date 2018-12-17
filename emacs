@@ -5,6 +5,9 @@
   (write-region "" nil custom-file))
 (load custom-file)
 
+;; Disable double buffering
+(setq default-frame-alist (append default-frame-alist '((inhibit-double-buffering . t))))
+
 ;; No startup message
 (setq inhibit-startup-message t)
 
