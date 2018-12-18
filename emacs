@@ -1,3 +1,5 @@
+;; -*- lisp -*-
+
 ;;========== General ==================================================
 ;; Move custom into a separate file
 (defconst custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -6,7 +8,7 @@
 (load custom-file)
 
 ;; Disable double buffering
-(setq default-frame-alist (append default-frame-alist '((inhibit-double-buffering . t))))
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
 ;; No startup message
 (setq inhibit-startup-message t)
