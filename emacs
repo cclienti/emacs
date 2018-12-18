@@ -1,3 +1,5 @@
+;; -*- lisp -*-
+
 ;;========== General ==================================================
 ;; Move custom into a separate file
 (defconst custom-file (expand-file-name "custom.el" user-emacs-directory))
