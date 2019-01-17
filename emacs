@@ -340,19 +340,21 @@
   (require 'company)
   (require 'flycheck-rtags)
   (defun rtags-c-mode-hook ()
-	(setq rtags-autostart-diagnostics t)
-	(rtags-diagnostics)
-	(setq rtags-completions-enabled t)
-	(push 'company-rtags company-backends)
-	(flycheck-select-checker 'rtags)
-	(setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-	(setq-local flycheck-check-syntax-automatically nil)
-	(define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-	(define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-	(define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
-	(define-key c-mode-base-map (kbd "M-p") (function rtags-print-symbol-info))
-	(define-key c-mode-base-map (kbd "<M-prior>") (function rtags-location-stack-back)) ;; PgDown
-	(define-key c-mode-base-map (kbd "<M-next>") (function rtags-location-stack-forward)))  ;; PgUp
+    (global-company-mode)
+    (setq rtags-autostart-diagnostics t)
+    (rtags-diagnostics)
+    (setq rtags-completions-enabled t)
+    (push 'company-rtags company-backends)
+    (setq rtags-display-result-backend 'helm)
+    (flycheck-select-checker 'rtags)
+    (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+    (setq-local flycheck-check-syntax-automatically nil)
+    (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+    (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
+    (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
+    (define-key c-mode-base-map (kbd "M-P") (function rtags-print-symbol-info))
+    (define-key c-mode-base-map (kbd "<M-prior>") (function rtags-location-stack-back)) ;; PgDown
+    (define-key c-mode-base-map (kbd "<M-next>") (function rtags-location-stack-forward)))  ;; PgUp
 
   (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
   (add-hook 'c-mode-common-hook 'rtags-c-mode-hook))
@@ -360,7 +362,6 @@
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
                               (c++-mode  . javadoc)))
-  (global-company-mode)
   (flyspell-prog-mode)
   (show-paren-mode 1)
   (setq highlight-indentation-offset 3)
