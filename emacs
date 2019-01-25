@@ -57,6 +57,7 @@
 ;;(add-to-list 'default-frame-alist '(height . 60))
 (add-to-list 'default-frame-alist '(width . 120))
 
+
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
 ;; The following is not necessary.
@@ -90,9 +91,9 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
-        helm company company-jedi
-        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
-        ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
+		 helm company company-jedi
+		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
+		 ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
 (mapc #'package-install my-package-list)
 
@@ -166,8 +167,9 @@
 
 ;; Various font settings depending on computer names
 (cond ((equal system-name "high-res")
-	   (set-default-font "DejaVu Sans Mono-9:antialias=none"))
-	  (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
+       (set-default-font "DejaVu Sans Mono-9:antialias=none"))
+      (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
+
 
 ;;;========== Highlight indentation ===========================================
 (require 'highlight-indent-guides)
@@ -191,6 +193,7 @@
 
 ;;;========== Magit ===============================================
 (add-hook 'git-commit-mode-hook (lambda () (setq fill-column 72)))
+
 
 ;;;========== Hide Show ===========================================
 (load-library "hideshow")
@@ -224,8 +227,8 @@
 ;;;========= RST Mode ==========================================================
 (speedbar-add-supported-extension ".rst")
 (setq auto-mode-alist
-	  (append '(("\\.rst$" . rst-mode)
-				("\\.rest$" . rst-mode)) auto-mode-alist))
+      (append '(("\\.rst$" . rst-mode)
+		("\\.rest$" . rst-mode)) auto-mode-alist))
 
 (defun rst-mode-hook-setting ()
   ;; (setq frame-background-mode 'dark)
@@ -274,7 +277,7 @@
 
 ;;========= Verilog ================================================
 (setq verilog-mode-pkg-dir
-	  (concat (file-name-as-directory my-emacs-pkg-dir) "verilog-mode.el"))
+      (concat (file-name-as-directory my-emacs-pkg-dir) "verilog-mode.el"))
 (unless (file-exists-p verilog-mode-pkg-dir)
   (url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
 
@@ -393,31 +396,31 @@
 
 (defadvice indent-according-to-mode (around smart-tabs activate)
   (let ((indent-tabs-mode indent-tabs-mode))
-        (if (memq indent-line-function
-                          '(indent-relative
-                                indent-relative-maybe))
-                (setq indent-tabs-mode nil))
-        ad-do-it))
+    (if (memq indent-line-function
+              '(indent-relative
+                indent-relative-maybe))
+        (setq indent-tabs-mode nil))
+    ad-do-it))
 
 (defmacro smart-tabs-advice (function offset)
   `(progn
-         (defvaralias ',offset 'tab-width)
-         (defadvice ,function (around smart-tabs activate)
-           (cond
-                (indent-tabs-mode
-                 (save-excursion
-                   (beginning-of-line)
-                   (while (looking-at "\t*\\( +\\)\t+")
-                         (replace-match "" nil nil nil 1)))
-                 (setq tab-width tab-width)
-                 (let ((tab-width fill-column)
-                           (,offset fill-column)
-                           (wstart (window-start)))
-                   (unwind-protect
-                           (progn ad-do-it)
-                         (set-window-start (selected-window) wstart))))
-                (t
-                 ad-do-it)))))
+     (defvaralias ',offset 'tab-width)
+     (defadvice ,function (around smart-tabs activate)
+       (cond
+        (indent-tabs-mode
+         (save-excursion
+           (beginning-of-line)
+           (while (looking-at "\t*\\( +\\)\t+")
+             (replace-match "" nil nil nil 1)))
+         (setq tab-width tab-width)
+         (let ((tab-width fill-column)
+               (,offset fill-column)
+               (wstart (window-start)))
+           (unwind-protect
+               (progn ad-do-it)
+             (set-window-start (selected-window) wstart))))
+        (t
+         ad-do-it)))))
 
 (smart-tabs-advice c-indent-line c-basic-offset)
 (smart-tabs-advice c-indent-region c-basic-offset)
@@ -427,10 +430,10 @@
 (speedbar-add-supported-extension ".proto")
 (defconst my-protobuf-style
   '((c-basic-offset . 4)
-	(indent-tabs-mode . nil)))
+    (indent-tabs-mode . nil)))
 
 (add-hook 'protobuf-mode-hook
-		  (lambda () (c-add-style "my-style" my-protobuf-style t)))
+	  (lambda () (c-add-style "my-style" my-protobuf-style t)))
 
 
 ;;======== Flex/Bison ==============================================
