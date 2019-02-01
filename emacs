@@ -95,7 +95,28 @@
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
 		 ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
-(mapc #'package-install my-package-list)
+;;----------------------------------------------------------------------
+;; Manage automatic installation of package.
+;;
+;; The following line works fine but it is quite slow when everithing
+;; is already installed:
+;;
+;; (mapc #'package-install my-package-list)
+;;
+;; Prefer this (from stack overflow):
+;;
+;; https://stackoverflow.com/questions/10092322/
+;; how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name
+
+(defun ensure-package-installed (package)
+  (if (package-installed-p package) nil (package-install package)))
+
+;; Make sure to have downloaded archive description.
+(or (file-exists-p package-user-dir)
+    (package-refresh-contents))
+
+;; Install packages if needed
+(mapcar #'ensure-package-installed my-package-list)
 
 
 ;;;========== Copy paste & mouse ===========================================
@@ -281,7 +302,6 @@
 (unless (file-exists-p verilog-mode-pkg-dir)
   (url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
 
-(load verilog-mode-pkg-dir)
 (require 'verilog-mode)
 
 (autoload 'verilog-mode "verilog-mode" "Verilog mode" t )
