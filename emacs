@@ -10,6 +10,9 @@
 ;; Disable double buffering
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
+;; No Antiliazing
+(setq mac-allow-anti-aliasing nil)
+
 ;; No startup message
 (setq inhibit-startup-message t)
 
@@ -25,9 +28,6 @@
 
 ;; window name
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
-
-;; No Antiliazing
-(setq mac-allow-anti-aliasing nil)
 
 ;; Linum except in speedbar
 (setq linum-format " %5d \u2502 ")
@@ -90,8 +90,8 @@
 
 ;; Automatically download packages
 (setq my-package-list
-      '(flycheck flycheck-pycheckers flycheck-pyflakes jedi
-		 helm company company-jedi
+      '(flycheck flycheck-pycheckers flycheck-pyflakes elpy
+		 helm company
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
 		 ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
@@ -130,11 +130,6 @@
 
 
 ;;;========== various shortcuts ============================================
-;; Comment region
-(global-set-key "\C-c c" 'comment-region)
-;; Change buffer
-(global-set-key [M-down] 'next-buffer)
-(global-set-key [M-up]  'previous-buffer)
 ;; Rigid Indent region
 (global-set-key [M-left]  'indent-rigidly-left)
 (global-set-key [M-right] 'indent-rigidly-right)
@@ -147,29 +142,6 @@
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
-(global-set-key (kbd "S-C-o") 'other-window)
-
-
-;;;========== ediff =====================================================
-(setq ediff-window-setup-function (quote ediff-setup-windows-plain))
-(custom-set-faces
- '(ediff-odd-diff-A         ((t (:background "DimGray"))))
- '(ediff-odd-diff-Ancestor  ((t (:background "DimGray"))))
- '(ediff-odd-diff-B         ((t (:background "DimGray"))))
- '(ediff-odd-diff-C         ((t (:background "DimGray"))))
- '(ediff-even-diff-A        ((t (:background "DimGray"))))
- '(ediff-even-diff-Ancestor	((t (:background "DimGray"))))
- '(ediff-even-diff-B		((t (:background "DimGray"))))
- '(ediff-even-diff-C		((t (:background "DimGray"))))
- )
-;; '(ediff-current-diff-A        ((t (:background "DimGray"))))
-;; '(ediff-current-diff-Ancestor ((t (:background "DimGray"))))
-;; '(ediff-current-diff-B        ((t (:background "DimGray"))))
-;; '(ediff-current-diff-C        ((t (:background "DimGray"))))
-;; '(ediff-fine-diff-A        ((t (:background "DimGray"))))
-;; '(ediff-fine-diff-Ancestor ((t (:background "DimGray"))))
-;; '(ediff-fine-diff-B        ((t (:background "DimGray"))))
-;; '(ediff-fine-diff-C        ((t (:background "DimGray"))))
 
 
 ;;;========== General color ==================================================
@@ -190,6 +162,19 @@
 (cond ((equal system-name "high-res")
        (set-default-font "DejaVu Sans Mono-9:antialias=none"))
       (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
+
+
+;;;========== ediff =====================================================
+(setq ediff-window-setup-function (quote ediff-setup-windows-plain))
+(custom-set-faces
+ '(ediff-odd-diff-A         ((t (:background "DimGray"))))
+ '(ediff-odd-diff-Ancestor  ((t (:background "DimGray"))))
+ '(ediff-odd-diff-B         ((t (:background "DimGray"))))
+ '(ediff-odd-diff-C         ((t (:background "DimGray"))))
+ '(ediff-even-diff-A        ((t (:background "DimGray"))))
+ '(ediff-even-diff-Ancestor	((t (:background "DimGray"))))
+ '(ediff-even-diff-B		((t (:background "DimGray"))))
+ '(ediff-even-diff-C		((t (:background "DimGray")))))
 
 
 ;;;========== Highlight indentation ===========================================
@@ -478,21 +463,21 @@
 
 
 ;;======== python-mode hook ========================================
-(require 'jedi)
-
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
   (flycheck-mode)
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
-
 (add-hook 'python-mode-hook 'my-python-mode-hook)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)
-(setq jedi:complete-on-dot t)
-(define-key jedi-mode-map (kbd "<C-tab>") 'jedi:complete)
-(define-key jedi-mode-map (kbd "M-.") 'jedi:goto-definition)
-(define-key jedi-mode-map (kbd "M-,") 'jedi:goto-definition)
+
+(elpy-enable)
+(when (load "flycheck" t t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt")
 
 
 ;;======== sh-mode hook ============================================
