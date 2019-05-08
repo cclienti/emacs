@@ -91,7 +91,7 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes elpy
-		 helm company
+		 helm company lsp-mode lsp-ui ccls
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
 		 ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
@@ -338,35 +338,6 @@
 
 
 ;;========= C/C++ ==================================================
-(setq rtags-lisp-dir "/home/cclienti/local/share/emacs/site-lisp/rtags")
-(if (file-directory-p rtags-lisp-dir)
-	(add-to-list 'load-path rtags-lisp-dir)
-  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/rtags"))
-(package-initialize)
-
-(when (require 'rtags nil 'noerror)
-  (require 'company)
-  (require 'flycheck-rtags)
-  (defun rtags-c-mode-hook ()
-    (global-company-mode)
-    (setq rtags-autostart-diagnostics t)
-    (rtags-diagnostics)
-    (setq rtags-completions-enabled t)
-    (push 'company-rtags company-backends)
-    (setq rtags-display-result-backend 'helm)
-    (flycheck-select-checker 'rtags)
-    (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-    (setq-local flycheck-check-syntax-automatically nil)
-    (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-    (define-key c-mode-base-map (kbd "M-.") (function rtags-find-symbol-at-point))
-    (define-key c-mode-base-map (kbd "M-,") (function rtags-find-references-at-point))
-    (define-key c-mode-base-map (kbd "M-P") (function rtags-print-symbol-info))
-    (define-key c-mode-base-map (kbd "<M-prior>") (function rtags-location-stack-back)) ;; PgDown
-    (define-key c-mode-base-map (kbd "<M-next>") (function rtags-location-stack-forward)))  ;; PgUp
-
-  (add-hook 'c++-mode-common-hook 'rtags-c-mode-hook)
-  (add-hook 'c-mode-common-hook 'rtags-c-mode-hook))
-
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
                               (c++-mode  . javadoc)))
@@ -381,12 +352,14 @@
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'brace-list-open 0))
 
-;;(add-hook 'c++-mode-common-hook 'global-flycheck-mode)
-;;(add-hook 'c-mode-common-hook 'global-flycheck-mode)
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+(require 'ccls)
+(add-hook 'c++-mode-common-hook 'lsp)
+(add-hook 'c-mode-common-hook 'lsp)
 
 
 ;;========= Smart tabs ==================================================
