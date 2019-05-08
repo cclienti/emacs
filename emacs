@@ -91,9 +91,9 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes elpy
-		 helm company lsp-mode lsp-ui ccls
-		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
-		 ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
+        helm company lsp-mode lsp-ui ccls company-lsp
+        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
+        ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
 ;;----------------------------------------------------------------------
 ;; Manage automatic installation of package.
