@@ -337,6 +337,20 @@
 (speedbar-add-supported-extension ".sdc")
 
 
+;;========= LangServer ===========================================
+(require 'lsp)
+(add-hook 'python-mode-hook 'lsp)
+(add-hook 'c++-mode-common-hook 'lsp)
+(add-hook 'c-mode-common-hook 'lsp)
+
+(custom-set-variables
+ '(lsp-enable-indentation nil)
+ '(lsp-ui-sideline-enable nil))
+
+(custom-set-faces
+ '(lsp-ui-doc-background ((t (:background "White")))))
+
+
 ;;========= C/C++ ==================================================
 (defun my-c-mode-hook ()
   (setq c-doc-comment-style '((c-mode    . javadoc)
@@ -356,11 +370,6 @@
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-
-(require 'ccls)
-(add-hook 'c++-mode-common-hook 'lsp)
-(add-hook 'c-mode-common-hook 'lsp)
-
 
 ;;========= Smart tabs ==================================================
 (defadvice align (around smart-tabs activate)
