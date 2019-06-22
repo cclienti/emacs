@@ -337,7 +337,7 @@
 (speedbar-add-supported-extension ".sdc")
 
 
-;;========= LangServer ===========================================
+;;========= LangServer===========================================
 (require 'lsp)
 (add-hook 'python-mode-hook 'lsp)
 (add-hook 'c++-mode-common-hook 'lsp)
@@ -345,10 +345,14 @@
 
 (custom-set-variables
  '(lsp-enable-indentation nil)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
 
 (custom-set-faces
- '(lsp-ui-doc-background ((t (:background "White")))))
+ '(lsp-ui-doc-background ((t (:background "Wheat"))))
+ '(lsp-ui-sideline-global ((t (:background "black"))))
+ '(lsp-ui-sideline-symbol ((t (:background "black" :foreground "grey" :box (:line-width -1 :color "grey") :height 0.99))))
+ '(lsp-ui-sideline-symbol-info ((t (:background "black" :slant italic :height 0.99)))))
 
 
 ;;========= C/C++ ==================================================
