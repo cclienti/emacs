@@ -345,6 +345,7 @@
 
 (custom-set-variables
  '(lsp-enable-indentation nil)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
 
 (custom-set-faces
