@@ -337,7 +337,7 @@
 (speedbar-add-supported-extension ".sdc")
 
 
-;;========= LangServer===========================================
+;;========= LangServer ==========================================
 (require 'lsp)
 (add-hook 'python-mode-hook 'lsp)
 (add-hook 'c++-mode-common-hook 'lsp)
@@ -361,6 +361,7 @@
                               (c++-mode  . javadoc)))
   (flyspell-prog-mode)
   (show-paren-mode 1)
+  (setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq highlight-indentation-offset 4)
   (setq c-basic-offset 4)
@@ -452,6 +453,7 @@
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
   (flycheck-mode)
+  (setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
 (add-hook 'python-mode-hook 'my-python-mode-hook)
