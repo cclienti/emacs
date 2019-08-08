@@ -90,7 +90,7 @@
 
 ;; Automatically download packages
 (setq my-package-list
-      '(flycheck flycheck-pycheckers flycheck-pyflakes elpy
+      '(flycheck flycheck-pycheckers flycheck-pyflakes
         helm company lsp-mode lsp-ui ccls company-lsp
         dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
         ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
@@ -337,7 +337,7 @@
 (speedbar-add-supported-extension ".sdc")
 
 
-;;========= LangServer===========================================
+;;========= LangServer ==========================================
 (require 'lsp)
 (add-hook 'python-mode-hook 'lsp)
 (add-hook 'c++-mode-common-hook 'lsp)
@@ -361,6 +361,7 @@
                               (c++-mode  . javadoc)))
   (flyspell-prog-mode)
   (show-paren-mode 1)
+  (setq lsp-prefer-flymake nil)
   (setq highlight-indentation-offset 3)
   (setq c++-tab-always-indent 1)
   (setq c-indent-level 3)
@@ -453,15 +454,10 @@
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
   (flycheck-mode)
+  (setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
 (add-hook 'python-mode-hook 'my-python-mode-hook)
-
-(elpy-enable)
-(when (load "flycheck" t t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
