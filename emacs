@@ -90,7 +90,7 @@
 
 ;; Automatically download packages
 (setq my-package-list
-      '(flycheck flycheck-pycheckers flycheck-pyflakes elpy
+      '(flycheck flycheck-pycheckers flycheck-pyflakes
         helm company lsp-mode lsp-ui ccls company-lsp
         dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
         ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
@@ -455,12 +455,6 @@
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
 (add-hook 'python-mode-hook 'my-python-mode-hook)
-
-(elpy-enable)
-(when (load "flycheck" t t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
