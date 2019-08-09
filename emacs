@@ -91,7 +91,7 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
-        helm company lsp-mode lsp-ui ccls company-lsp
+        helm company lsp-mode lsp-ui ccls company-lsp highlight-doxygen
         dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
         ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
 
@@ -184,6 +184,12 @@
 (setq highlight-indent-guides-method 'column)
 (set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
 (set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
+
+
+;;;========== Highlight ===========================================
+;; Enable the minor mode for all major modes specified in
+;; `highlight-doxygen-modes (c, c++, obj-c)
+(highlight-doxygen-global-mode 1)
 
 
 ;;;========== Undo Tree ===========================================
@@ -357,8 +363,6 @@
 
 ;;========= C/C++ ==================================================
 (defun my-c-mode-hook ()
-  (setq c-doc-comment-style '((c-mode    . javadoc)
-                              (c++-mode  . javadoc)))
   (flyspell-prog-mode)
   (show-paren-mode 1)
   (setq lsp-prefer-flymake nil)
