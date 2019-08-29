@@ -351,14 +351,13 @@
       (write-region start-pos end-pos "~/.svmodp-dump")))
   (shell-command "svmodp -c ~/.svmodp-dump -d ~/.svmodp-dump"))
 
-(defun svmodp-past-as-instance ()
-  (interactive)
+(defun svmodp-past-as (command)
   (let (instance)
-    (setq instance (shell-command-to-string "svmodp -d ~/.svmodp-dump --paste-as-instance"))
-    (insert instance)))
+    (setq value (shell-command-to-string (format "svmodp -d ~/.svmodp-dump --paste-as-%s" command)))
+    (insert value)))
 
 (global-set-key (kbd "M-p M-w") 'svmodp-copy)
-(global-set-key (kbd "M-p M-i") 'svmodp-past-as-instance)
+(global-set-key (kbd "M-p M-i") (lambda () (interactive) (svmodp-past-as "instance")))
 
 ;;========= LangServer ==========================================
 (require 'lsp)
