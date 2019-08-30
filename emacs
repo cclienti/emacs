@@ -324,21 +324,7 @@
 (speedbar-add-supported-extension ".qip")
 (speedbar-add-supported-extension ".sdc")
 
-;; (global-set-key (kbd "M-p M-w") 'svm-copy-module)
-;; (global-set-key (kbd "M-p M-r") 'svm-reverse-module)
-;; (global-set-key (kbd "M-p M-m") 'svm-paste-as-module)
-;; (global-set-key (kbd "M-p M-g") 'svm-paste-as-packages)
-;; (global-set-key (kbd "M-p M-i") 'svm-paste-as-instance)
-;; (global-set-key (kbd "M-p M-b") 'svm-paste-as-clockingblock)
-;; (global-set-key (kbd "M-p M-c") 'svm-paste-as-parameters)
-;; (global-set-key (kbd "M-p M-s") 'svm-paste-as-signals)
-;; (global-set-key (kbd "M-p M-o") 'svm-paste-as-logic)
-;; (global-set-key (kbd "M-p M-l") 'svm-paste-as-init-latch)
-;; (global-set-key (kbd "M-p M-a") 'svm-paste-as-init-wire)
-;; (global-set-key (kbd "M-p M-t") 'svm-paste-as-doc-table)
-;; (global-set-key (kbd "M-p M-y") 'svm-paste-as-yaml)
-;; (global-set-key (kbd "M-p M-x") 'svm-paste-as-pandaxml))
-
+;; Manage SVModule
 (defun svmodp-copy ()
   (interactive)
   (let (start-pos end-pos (case-fold-search t))
@@ -351,13 +337,27 @@
       (write-region start-pos end-pos "~/.svmodp-dump")))
   (shell-command "svmodp -c ~/.svmodp-dump -d ~/.svmodp-dump"))
 
-(defun svmodp-past-as (command)
+(defun svmodp-command (command get-value)
   (let (instance)
-    (setq value (shell-command-to-string (format "svmodp -d ~/.svmodp-dump --paste-as-%s" command)))
-    (insert value)))
+    (message "verilog-indent-level=%d" verilog-indent-level)
+    (setq value (shell-command-to-string
+		 (format "svmodp -z %d -d ~/.svmodp-dump --%s" verilog-indent-level command)))
+    (when get-value
+	(insert value))))
 
 (global-set-key (kbd "M-p M-w") 'svmodp-copy)
-(global-set-key (kbd "M-p M-i") (lambda () (interactive) (svmodp-past-as "instance")))
+(global-set-key (kbd "M-p M-r") (lambda () (interactive) (svmodp-command "reverse" nil)))
+(global-set-key (kbd "M-p M-m") (lambda () (interactive) (svmodp-command "paste-as-module" t)))
+(global-set-key (kbd "M-p M-g") (lambda () (interactive) (svmodp-command "paste-as-packages" t)))
+(global-set-key (kbd "M-p M-i") (lambda () (interactive) (svmodp-command "paste-as-instance" t)))
+(global-set-key (kbd "M-p M-b") (lambda () (interactive) (svmodp-command "paste-as-clockingblock" t)))
+(global-set-key (kbd "M-p M-c") (lambda () (interactive) (svmodp-command "paste-as-parameters" t)))
+(global-set-key (kbd "M-p M-s") (lambda () (interactive) (svmodp-command "paste-as-signals" t)))
+(global-set-key (kbd "M-p M-o") (lambda () (interactive) (svmodp-command "paste-as-logic" t)))
+(global-set-key (kbd "M-p M-l") (lambda () (interactive) (svmodp-command "paste-as-init-latch" t)))
+(global-set-key (kbd "M-p M-a") (lambda () (interactive) (svmodp-command "paste-as-init-wire" t)))
+(global-set-key (kbd "M-p M-t") (lambda () (interactive) (svmodp-command "paste-as-doc-table" t)))
+(global-set-key (kbd "M-p M-y") (lambda () (interactive) (svmodp-command "paste-as-wavedisp" t)))
 
 ;;========= LangServer ==========================================
 (require 'lsp)
