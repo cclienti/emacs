@@ -53,10 +53,6 @@
 ;; default tab size
 (setq default-tab-width 4)
 
-;; default frame size
-;;(add-to-list 'default-frame-alist '(height . 60))
-(add-to-list 'default-frame-alist '(width . 120))
-
 
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
@@ -92,7 +88,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
 		 helm company lsp-mode lsp-ui company-lsp
-		 color-theme-modern 
+		 color-theme-modern
 		 highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
@@ -205,10 +201,6 @@
 (sr-speedbar-refresh-turn-off)
 (global-set-key '[f2] 'speedbar-toggle-show-all-files)
 (global-set-key '[f1] 'sr-speedbar-toggle)
-
-
-;;;========= Yasnippet =========================================================
-(yas-global-mode -1)
 
 
 ;;;========= RST Mode ==========================================================
