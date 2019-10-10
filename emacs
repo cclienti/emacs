@@ -30,7 +30,7 @@
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
 
 ;; Linum except in speedbar
-(setq linum-format " %5d \u2502 ")
+(setq linum-format "%5d\u2502")
 (global-linum-mode t)
 (add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
 
@@ -39,7 +39,7 @@
 
 ;; Line wrap
 (setq whitespace-line-column 120)
-(set-fill-column 119)
+(set-fill-column 120)
 
 ;; No bip
 (setq ring-bell-function 'ignore)
@@ -91,9 +91,9 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
-        helm company lsp-mode lsp-ui ccls company-lsp highlight-doxygen
-        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode
-        ein magit undo-tree sr-speedbar highlight-indent-guides yasnippet))
+        helm company lsp-mode lsp-ui company-lsp
+        highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
+        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
 ;;----------------------------------------------------------------------
 ;; Manage automatic installation of package.
@@ -144,20 +144,7 @@
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 
-;;;========== General color ==================================================
-(cond (window-system
-       (set-foreground-color "wheat")
-       (set-background-color "DarkSlateGray")
-       (set-cursor-color "MediumOrchid")
-       (set-mouse-color "MediumOrchid")
-       (set-face-foreground 'menu "wheat")
-       (set-face-background 'menu "DarkSlateGray")
-       (set-face-background 'fringe "DarkSlateGray")
-       (set-face-foreground 'region "white")
-       (set-face-background 'region "SteelBlue")))
-
-(setq frame-background-mode 'dark)
-
+;;;========== Font ==================================================
 ;; Various font settings depending on computer names
 (cond ((equal system-name "high-res")
        (set-default-font "DejaVu Sans Mono-9:antialias=none"))
@@ -166,15 +153,7 @@
 
 ;;;========== ediff =====================================================
 (setq ediff-window-setup-function (quote ediff-setup-windows-plain))
-(custom-set-faces
- '(ediff-odd-diff-A         ((t (:background "DimGray"))))
- '(ediff-odd-diff-Ancestor  ((t (:background "DimGray"))))
- '(ediff-odd-diff-B         ((t (:background "DimGray"))))
- '(ediff-odd-diff-C         ((t (:background "DimGray"))))
- '(ediff-even-diff-A        ((t (:background "DimGray"))))
- '(ediff-even-diff-Ancestor	((t (:background "DimGray"))))
- '(ediff-even-diff-B		((t (:background "DimGray"))))
- '(ediff-even-diff-C		((t (:background "DimGray")))))
+
 
 
 ;;;========== Highlight indentation ===========================================
@@ -182,14 +161,8 @@
 (global-set-key '[f4] 'highlight-indent-guides-mode)
 ;;(setq highlight-indent-guides-method 'character)
 (setq highlight-indent-guides-method 'column)
-(set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
-(set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
-
-
-;;;========== Highlight ===========================================
-;; Enable the minor mode for all major modes specified in
-;; `highlight-doxygen-modes (c, c++, obj-c)
-(highlight-doxygen-global-mode 1)
+;; (set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
+;; (set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
 
 
 ;;;========== Undo Tree ===========================================
@@ -203,6 +176,7 @@
 (advice-add 'undo-tree-visualizer-mouse-set :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualizer-set :after #'undo-tree-visualizer-update-linum)
 
+
 ;;;========== Magit ===============================================
 (add-hook 'git-commit-mode-hook (lambda () (setq fill-column 72)))
 
@@ -213,12 +187,12 @@
 (global-set-key (kbd "M-=") 'hs-hide-level)
 (global-set-key (kbd "M-*") 'hs-show-all)
 (add-hook 'c-mode-common-hook   'hs-minor-mode)
+(add-hook 'c++-mode-common-hook 'hs-minor-mode)
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 (add-hook 'java-mode-hook       'hs-minor-mode)
 (add-hook 'lisp-mode-hook       'hs-minor-mode)
 (add-hook 'perl-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
-(add-hook 'verilog-mode-hook    'hs-minor-mode)
 (add-hook 'python-mode-hook     'hs-minor-mode)
 
 
@@ -287,63 +261,7 @@
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 
-;;========= Verilog ================================================
-(setq verilog-mode-pkg-dir
-      (concat (file-name-as-directory my-emacs-pkg-dir) "verilog-mode.el"))
-(unless (file-exists-p verilog-mode-pkg-dir)
-  (url-copy-file "https://www.veripool.org/ftp/verilog-mode.el" verilog-mode-pkg-dir))
-
-(require 'verilog-mode)
-
-(autoload 'verilog-mode "verilog-mode" "Verilog mode" t )
-(add-to-list 'auto-mode-alist '("\\.[ds]?vh?\\'" . verilog-mode))
-
-(when (require 'pymacs nil 'noerror)
-  (eval-after-load "pymacs" '(add-to-list 'pymacs-load-path "~/.emacs.d/packages/svmodule"))
-  (pymacs-load "emacs" "svm-")
-  (global-set-key (kbd "M-p M-w") 'svm-copy-module)
-  (global-set-key (kbd "M-p M-r") 'svm-reverse-module)
-  (global-set-key (kbd "M-p M-m") 'svm-paste-as-module)
-  (global-set-key (kbd "M-p M-g") 'svm-paste-as-packages)
-  (global-set-key (kbd "M-p M-i") 'svm-paste-as-instance)
-  (global-set-key (kbd "M-p M-b") 'svm-paste-as-clockingblock)
-  (global-set-key (kbd "M-p M-c") 'svm-paste-as-parameters)
-  (global-set-key (kbd "M-p M-s") 'svm-paste-as-signals)
-  (global-set-key (kbd "M-p M-o") 'svm-paste-as-logic)
-  (global-set-key (kbd "M-p M-l") 'svm-paste-as-init-latch)
-  (global-set-key (kbd "M-p M-a") 'svm-paste-as-init-wire)
-  (global-set-key (kbd "M-p M-t") 'svm-paste-as-doc-table)
-  (global-set-key (kbd "M-p M-y") 'svm-paste-as-yaml)
-  (global-set-key (kbd "M-p M-x") 'svm-paste-as-pandaxml))
-
-(defun my-verilog-hook ()
-  (flyspell-prog-mode)
-  (setq indent-tabs-mode nil)
-  (setq highlight-indentation-offset 3)
-  (setq verilog-indent-level 3)
-  (setq verilog-indent-level-module 3)
-  (setq verilog-indent-level-declaration 3)
-  (setq verilog-indent-level-behavioral 3)
-  (setq verilog-indent-level-directive 0)
-  (setq verilog-case-indent 3)
-  (setq verilog-auto-lineup 'assignment)
-  (setq verilog-tab-always-indent t)
-  (setq verilog-auto-newline nil)
-  (setq verilog-auto-indent-on-newline nil)
-  (setq verilog-auto-endcomments nil)
-  (setq verilog-indent-begin-after-if nil))
-
-(add-hook 'verilog-mode-hook 'my-verilog-hook)
-
-(speedbar-add-supported-extension ".sv")
-(speedbar-add-supported-extension ".v")
-(speedbar-add-supported-extension ".do")
-(speedbar-add-supported-extension ".xml")
-(speedbar-add-supported-extension ".qip")
-(speedbar-add-supported-extension ".sdc")
-
-
-;;========= LangServer ==========================================
+;;========= LangServer===========================================
 (require 'lsp)
 (add-hook 'python-mode-hook 'lsp)
 (add-hook 'c++-mode-common-hook 'lsp)
@@ -354,18 +272,12 @@
  '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
 
-(custom-set-faces
- '(lsp-ui-doc-background ((t (:background "Wheat"))))
- '(lsp-ui-sideline-global ((t (:background "black"))))
- '(lsp-ui-sideline-symbol ((t (:background "black" :foreground "grey" :box (:line-width -1 :color "grey") :height 0.99))))
- '(lsp-ui-sideline-symbol-info ((t (:background "black" :slant italic :height 0.99)))))
-
 
 ;;========= C/C++ ==================================================
 (defun my-c-mode-hook ()
   (flyspell-prog-mode)
   (show-paren-mode 1)
-  (setq lsp-prefer-flymake nil)
+  ;;(setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq highlight-indentation-offset 4)
   (setq c-basic-offset 4)
@@ -378,6 +290,7 @@
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
 
 ;;========= Smart tabs ==================================================
 (defadvice align (around smart-tabs activate)
@@ -456,8 +369,6 @@
 ;;======== python-mode hook ========================================
 (defun my-python-mode-hook ()
   (flyspell-prog-mode)
-  (flycheck-mode)
-  (setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
 (add-hook 'python-mode-hook 'my-python-mode-hook)
@@ -515,32 +426,8 @@
 (speedbar-add-supported-extension ".scss")
 
 
-;;======== color in compilation buffer ==============================
-(require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-(set-face-attribute 'comint-highlight-prompt nil
-                    :inherit nil)
-
-
 ;;======== Whitespace line trimmer =================================
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-
-;;========= Upcase region and all matches ==========================
-(defun upcase-region-and-matches (start end)
-  "Upcase the selection and all strings that match"
-  (interactive "r")
-  (setq to-upcase (buffer-substring start end))
-  (setq upcased (upcase to-upcase))
-  (message "%s -> %s" to-upcase upcased)
-  (goto-char 0)
-  (while (search-forward to-upcase nil t) (replace-match upcased)))
-(global-set-key '[f6] 'upcase-region-and-matches)
-(put 'upcase-region 'disabled nil)
 
 
 ;;========== Latex ==================================================
