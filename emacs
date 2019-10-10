@@ -91,9 +91,10 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
-        helm company lsp-mode lsp-ui company-lsp
-        highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
-        dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
+		 helm company lsp-mode lsp-ui company-lsp
+		 color-theme-modern 
+		 highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
+		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
 ;;----------------------------------------------------------------------
 ;; Manage automatic installation of package.
