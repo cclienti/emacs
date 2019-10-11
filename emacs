@@ -262,6 +262,7 @@
 (add-hook 'c-mode-common-hook 'lsp)
 
 (custom-set-variables
+ '(lsp-enable-snippet nil)
  '(lsp-enable-indentation nil)
  '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
@@ -271,7 +272,7 @@
 (defun my-c-mode-hook ()
   (flyspell-prog-mode)
   (show-paren-mode 1)
-  ;;(setq lsp-prefer-flymake nil)
+  (setq lsp-prefer-flymake nil)
   (setq indent-tabs-mode nil)
   (setq highlight-indentation-offset 4)
   (setq c-basic-offset 4)
