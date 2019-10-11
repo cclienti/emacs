@@ -95,7 +95,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
 		 helm company lsp-mode lsp-ui company-lsp
-		 color-theme-modern yasnippet
+		 color-theme-modern
 		 highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
@@ -334,6 +334,7 @@
 (add-hook 'c-mode-common-hook 'lsp)
 
 (custom-set-variables
+ '(lsp-enable-snippet nil)
  '(lsp-enable-indentation nil)
  '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
