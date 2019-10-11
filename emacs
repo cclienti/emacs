@@ -54,6 +54,13 @@
 (setq default-tab-width 4)
 
 
+;;;========== Font ==================================================
+;; Various font settings depending on computer names
+(cond ((equal (getenv "EMACS_HIGH_RESOLUTION") "ON")
+       (set-default-font "DejaVu Sans Mono-9:antialias=none"))
+      (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
+
+
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
 ;; The following is not necessary.
@@ -113,7 +120,8 @@
     (package-refresh-contents))
 
 ;; Install packages if needed
-(mapcar #'ensure-package-installed my-package-list)
+(if (string= (getenv "EMACS_FAST_BOOT") "ON") nil
+  (mapcar #'ensure-package-installed my-package-list))
 
 
 ;;;========== Copy paste & mouse ===========================================
@@ -139,13 +147,6 @@
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
-
-;;;========== Font ==================================================
-;; Various font settings depending on computer names
-(cond ((equal system-name "high-res")
-       (set-default-font "DejaVu Sans Mono-9:antialias=none"))
-      (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
 
 
 ;;;========== ediff =====================================================
