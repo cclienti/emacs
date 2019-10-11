@@ -95,7 +95,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
 		 helm company lsp-mode lsp-ui company-lsp
-		 color-theme-modern
+		 color-theme-modern yasnippet
 		 highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
@@ -343,7 +343,7 @@
 (defun my-c-mode-hook ()
   (flyspell-prog-mode)
   (show-paren-mode 1)
-  ;;(setq lsp-prefer-flymake nil)
+  (setq lsp-prefer-flymake nil)
   (setq highlight-indentation-offset 3)
   (setq c++-tab-always-indent 1)
   (setq c-indent-level 3)
