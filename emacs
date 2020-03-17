@@ -96,7 +96,7 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
 		 helm company lsp-mode lsp-ui company-lsp
-		 color-theme-modern flycheck-grammalecte
+		 color-theme-modern flycheck-grammalecte snakemake-mode
 		 highlight-doxygen magit sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
