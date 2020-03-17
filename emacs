@@ -78,6 +78,7 @@
 ;; Define package repository
 (when (>= emacs-major-version 24)
   (require 'package)
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa" . "http://melpa.org/packages/")))
   (package-initialize))
@@ -95,8 +96,8 @@
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
 		 helm company lsp-mode lsp-ui company-lsp
-		 color-theme-modern
-		 highlight-doxygen magit undo-tree sr-speedbar highlight-indent-guides
+		 color-theme-modern flycheck-grammalecte
+		 highlight-doxygen magit sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
 
 ;;----------------------------------------------------------------------
@@ -148,6 +149,8 @@
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
+;;=========== Grammalecte ===============================================
+(require 'flycheck-grammalecte)
 
 ;;;========== ediff =====================================================
 (setq ediff-window-setup-function (quote ediff-setup-windows-plain))
@@ -161,18 +164,6 @@
 (setq highlight-indent-guides-method 'column)
 ;; (set-face-background 'highlight-indent-guides-odd-face "#3f5f5f")
 ;; (set-face-background 'highlight-indent-guides-even-face "#4f6f6f")
-
-
-;;;========== Undo Tree ===========================================
-(global-undo-tree-mode)
-(defun undo-tree-visualizer-update-linum (&rest args)
-  (linum-update undo-tree-visualizer-parent-buffer))
-(advice-add 'undo-tree-visualize-undo :after #'undo-tree-visualizer-update-linum)
-(advice-add 'undo-tree-visualize-redo :after #'undo-tree-visualizer-update-linum)
-(advice-add 'undo-tree-visualize-undo-to-x :after #'undo-tree-visualizer-update-linum)
-(advice-add 'undo-tree-visualize-redo-to-x :after #'undo-tree-visualizer-update-linum)
-(advice-add 'undo-tree-visualizer-mouse-set :after #'undo-tree-visualizer-update-linum)
-(advice-add 'undo-tree-visualizer-set :after #'undo-tree-visualizer-update-linum)
 
 
 ;;;========== Magit ===============================================
@@ -235,6 +226,11 @@
   (setq show-trailing-whitespace t))
 (add-hook 'makefile-mode-hook 'my-makefile-hook)
 (speedbar-add-supported-extension ".make")
+(speedbar-add-supported-extension ".mak")
+
+
+;;========= SnakeMake==============================================
+(speedbar-add-supported-extension ".smk")
 
 
 ;;========= CMake ==================================================
