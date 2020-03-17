@@ -38,8 +38,8 @@
 (column-number-mode t)
 
 ;; Line wrap
-(setq whitespace-line-column 120)
-(set-fill-column 120)
+(setq whitespace-line-column 100)
+(set-fill-column 100)
 
 ;; No bip
 (setq ring-bell-function 'ignore)
@@ -209,8 +209,18 @@
 (defun rst-mode-hook-setting ()
   ;; (setq frame-background-mode 'dark)
   (setq rst-slides-program "open -a Firefox")
-  (setq indent-tabs-mode nil))
+  (setq indent-tabs-mode nil)
+  (auto-fill-mode t)
+  (set-fill-column 100))
 (add-hook 'rst-mode-hook 'rst-mode-hook-setting)
+
+
+;;;========= Markdown Mode =====================================================
+(speedbar-add-supported-extension ".md")
+(defun my-markdown-mode-hook ()
+       (auto-fill-mode t)
+       (set-fill-column 100))
+(add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 
 
 ;;;========= Text mode === spelling ============================================
@@ -220,7 +230,7 @@
           (lambda ()
             (flyspell-mode 1)
             (turn-on-auto-fill)
-            (setq fill-column 120)))
+            (setq fill-column 100)))
 
 (setq ispell-program-name "aspell")
 (setq flyspell-issue-welcome-flag nil)
