@@ -125,6 +125,11 @@
   (mapcar #'ensure-package-installed my-package-list))
 
 
+;;=========== Theme ========================================================
+(load-theme 'tango-dark t t)
+(enable-theme 'tango-dark)
+
+
 ;;;========== Copy paste & mouse ===========================================
 ;; copy-paste to old default emacs option
 ;; http://www.emacswiki.org/emacs/CopyAndPaste
