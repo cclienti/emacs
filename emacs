@@ -56,10 +56,8 @@
 
 ;;;========== Font ==================================================
 ;; Various font settings depending on computer names
-(cond ((equal (getenv "EMACS_HIGH_RESOLUTION") "ON")
-       (set-default-font "DejaVu Sans Mono-9:antialias=none"))
-      (t (add-to-list 'default-frame-alist '(font . "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"))))
-
+;;(set-frame-font "DejaVu Sans Mono-10:antialias=none" nil t)
+(set-frame-font "Terminus-12:antialias=none" nil t)
 
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
@@ -78,7 +76,7 @@
 ;; Define package repository
 (when (>= emacs-major-version 24)
   (require 'package)
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+  ;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa" . "http://melpa.org/packages/")))
   (package-initialize))
