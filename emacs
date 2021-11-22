@@ -57,7 +57,21 @@
 ;;;========== Font ==================================================
 ;; Various font settings depending on computer names
 ;;(set-frame-font "DejaVu Sans Mono-10:antialias=none" nil t)
-(set-frame-font "Terminus-12:antialias=none" nil t)
+(if (> (display-pixel-width) 1920)
+    (set-frame-font "Terminus-10:antialias=none" nil t)
+   (set-frame-font "Terminus-9:antialias=none" nil t))
+
+(defun maximize-frame-font ()
+  (interactive)
+  (set-frame-font "Terminus-10:antialias=none" nil t))
+
+(defun minimize-frame-font ()
+  (interactive)
+  (set-frame-font "Terminus-9:antialias=none" nil t))
+
+(global-set-key '[f7] 'minimize-frame-font)
+(global-set-key '[f8] 'maximize-frame-font)
+
 
 ;;;========== Proxy =====================================================
 ;; The url-proxy-services already manages http_proxy env variable.
