@@ -107,7 +107,7 @@
 ;; Automatically download packages
 (setq my-package-list
       '(flycheck flycheck-pycheckers flycheck-pyflakes
-		 helm company lsp-mode lsp-ui
+		 helm company lsp-mode lsp-ui rust-mode
 		 color-theme-modern flycheck-grammalecte snakemake-mode
 		 highlight-doxygen magit sr-speedbar highlight-indent-guides
 		 dot-mode cmake-mode bison-mode markdown-mode yaml-mode protobuf-mode))
@@ -200,6 +200,7 @@
 (add-hook 'perl-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 (add-hook 'python-mode-hook     'hs-minor-mode)
+(add-hook 'rustn-mode-hook      'hs-minor-mode)
 
 
 ;;;========= sr-speedbar =========================================================
@@ -278,11 +279,12 @@
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 
-;;========= LangServer===========================================
+;;========= LangServer ===========================================
 (require 'lsp)
 (add-hook 'python-mode-hook 'lsp)
 (add-hook 'c++-mode-common-hook 'lsp)
 (add-hook 'c-mode-common-hook 'lsp)
+(add-hook 'rust-mode-hook 'lsp)
 
 (custom-set-variables
  '(lsp-enable-snippet nil)
@@ -290,6 +292,15 @@
  '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
 
+;;========= Rust ===================================================
+(defun my-rust-mode-hook ()
+  (flyspell-prog-mode)
+  (show-paren-mode 1)
+  (setq lsp-prefer-flymake nil)
+  (setq indent-tabs-mode nil)
+  (setq highlight-indentation-offset 4)
+)
+(add-hook 'rust-mode-hook 'my-rust-mode-hook)
 
 ;;========= C/C++ ==================================================
 (defun my-c-mode-hook ()
