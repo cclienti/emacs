@@ -57,13 +57,15 @@
 ;;;========== Font ==================================================
 ;; Various font settings depending on computer names
 ;;(set-frame-font "DejaVu Sans Mono-10:antialias=none" nil t)
-(if (> (display-pixel-width) 1920)
-    (set-frame-font "Terminus-10:antialias=none" nil t)
+
+(if (and (>= (display-pixel-width) 1920)
+	 (>= (display-mm-width) 500))
+    (set-frame-font "Terminus-11:antialias=none" nil t)
    (set-frame-font "Terminus-9:antialias=none" nil t))
 
 (defun maximize-frame-font ()
   (interactive)
-  (set-frame-font "Terminus-10:antialias=none" nil t))
+  (set-frame-font "Terminus-11:antialias=none" nil t))
 
 (defun minimize-frame-font ()
   (interactive)
@@ -200,7 +202,7 @@
 (add-hook 'perl-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 (add-hook 'python-mode-hook     'hs-minor-mode)
-(add-hook 'rustn-mode-hook      'hs-minor-mode)
+(add-hook 'rust-mode-hook       'hs-minor-mode)
 
 
 ;;;========= sr-speedbar =========================================================
@@ -292,6 +294,7 @@
  '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-sideline-enable nil))
 
+
 ;;========= Rust ===================================================
 (defun my-rust-mode-hook ()
   (flyspell-prog-mode)
@@ -301,6 +304,12 @@
   (setq highlight-indentation-offset 4)
 )
 (add-hook 'rust-mode-hook 'my-rust-mode-hook)
+
+
+;;========= OpenScad ==========================================
+(custom-set-variables
+ '(lsp-openscad-server "~/.cargo/bin/openscad-lsp"))
+
 
 ;;========= C/C++ ==================================================
 (defun my-c-mode-hook ()
