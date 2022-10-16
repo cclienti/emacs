@@ -368,6 +368,8 @@
 
 
 ;;========= Rust ===================================================
+(speedbar-add-supported-extension ".rs")
+(speedbar-add-supported-extension ".toml")
 (defun my-rust-mode-hook ()
   (flyspell-prog-mode)
   (show-paren-mode 1)
