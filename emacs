@@ -63,6 +63,10 @@
     (set-frame-font "Terminus-11:antialias=none" nil t)
    (set-frame-font "Terminus-9:antialias=none" nil t))
 
+(defun super-maximize-frame-font ()
+  (interactive)
+  (set-frame-font "Terminus-13:antialias=none" nil t))
+
 (defun maximize-frame-font ()
   (interactive)
   (set-frame-font "Terminus-11:antialias=none" nil t))
@@ -73,6 +77,7 @@
 
 (global-set-key '[f7] 'minimize-frame-font)
 (global-set-key '[f8] 'maximize-frame-font)
+(global-set-key '[f9] 'super-maximize-frame-font)
 
 
 ;;;========== Proxy =====================================================
