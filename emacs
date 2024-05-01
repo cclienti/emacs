@@ -31,7 +31,7 @@
 
 ;; Linum except in speedbar
 (setq linum-format "%5d\u2502")
-(global-linum-mode t)
+(display-line-numbers-mode t)
 (add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
 
 ;; Column number
