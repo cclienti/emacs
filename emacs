@@ -29,10 +29,9 @@
 ;; window name
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
 
-;; Linum except in speedbar
-(setq linum-format "%5d\u2502")
-(display-line-numbers-mode t)
-(add-hook 'speedbar-mode-hook (lambda () (linum-mode 0)))
+;; Lin numbers mode except in speedbar
+(global-display-line-numbers-mode)
+(add-hook 'speedbar-mode-hook (lambda () (display-line-numbers-mode 0)))
 
 ;; Column number
 (column-number-mode t)
