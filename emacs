@@ -274,6 +274,7 @@
                 ("\\.cmake\\'" . cmake-mode))
               auto-mode-alist))
 (speedbar-add-supported-extension ".cmake")
+(setq cmake-tab-width 4)
 
 
 ;;========= YAML ==================================================
@@ -368,6 +369,7 @@
  '(lsp-enable-snippet nil)
  '(lsp-enable-indentation nil)
  '(lsp-enable-on-type-formatting nil)
+ '(lsp-completion-enable-additional-text-edit nil)
  '(lsp-ui-sideline-enable nil))
 
 
@@ -400,7 +402,9 @@
   ;; (c-set-offset 'case-label '+)
   (c-set-offset 'innamespace 0)
   (c-set-offset 'substatement-open 0)
-  (c-set-offset 'brace-list-open 0))
+  (c-set-offset 'brace-list-open 0)
+  (c-set-offset 'arglist-intro '+)
+  (c-set-offset 'arglist-close 0))
 
 (add-hook 'c++-mode-common-hook 'my-c-mode-hook)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
