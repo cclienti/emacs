@@ -61,7 +61,7 @@
   (my-set-font)
 
   (global-set-key '[f9] (lambda () (interactive) (set-frame-font "Terminus-13" nil t)))
-  (global-set-key '[f8] (lambda () (interactive) (set-frame=-font "Terminus-11" nil t)))
+  (global-set-key '[f8] (lambda () (interactive) (set-frame-font "Terminus-11" nil t)))
   (global-set-key '[f7] (lambda () (interactive) (set-frame-font "Terminus-9" nil t)))
   (global-set-key [M-left]  'indent-rigidly-left)  ;; Rigid Indent left region
   (global-set-key [M-right] 'indent-rigidly-right)  ;; Rigid Indent right region
@@ -75,8 +75,9 @@
 
 (use-package display-line-numbers
   :ensure nil
-  :init
-  (global-display-line-numbers-mode 1)
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  (text-mode . display-line-numbers-mode)
   :custom
   (display-line-numbers-type 't) ;; 't' (abs), 'relative' or 'visual' (visual-line-mode)
   )
@@ -111,6 +112,8 @@
   )
 
 (use-package treemacs
+  :init
+  (display-line-numbers-mode -1)
   :ensure t
   :defer t
   :after (treemacs-all-the-icons)
