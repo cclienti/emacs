@@ -249,3 +249,14 @@
   :ensure t
   :mode ("Dockerfile\\'" . dockerfile-mode)
   )
+
+(use-package groovy-mode
+  :ensure t
+  :mode ("Jenkinsfile\\'" . groovy-mode)
+  :hook (groovy-mode . (lambda ()
+                         (setq indent-tabs-mode nil)
+                         (setq groovy-indent-offset 4))))
+
+(use-package jenkinsfile-mode
+  :ensure t
+  :mode "Jenkinsfile\\'")
