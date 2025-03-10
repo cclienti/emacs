@@ -112,18 +112,29 @@
   )
 
 (use-package treemacs
-  :init
-  (display-line-numbers-mode -1)
   :ensure t
   :defer t
-  :after (treemacs-all-the-icons)
+  :after treemacs-all-the-icons
   :config
-  (treemacs-load-theme "all-the-icons")
+  ;;(setq treemacs-no-png-images t)
+  :custom-face
+  (treemacs-root-face ((t (:height 1.0))))
+  (treemacs-file-face ((t (:height 1.0))))
+  )
+
+(use-package treemacs-all-the-icons
+  :ensure t
   )
 
 (use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
+ :hook (dired-mode . treemacs-icons-dired-enable-once)
+ :ensure t)
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs)
+  :ensure t
+  :config
+  (lsp-treemacs-sync-mode 1))
 
 (use-package magit
   :ensure t
@@ -136,7 +147,7 @@
   (git-commit-mode . flyspell-mode)
   :config
   (setq magit-save-repository-buffers 'dontask
-        magit-revert-buffers 'silent
+    magit-revert-buffers 'silent
     magit-no-confirm '(stage-all-changes))
   )
 
