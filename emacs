@@ -114,7 +114,7 @@
 (use-package treemacs
   :ensure t
   :defer t
-  :after treemacs-all-the-icons
+  :after (treemacs-all-the-icons)
   :config
   ;;(setq treemacs-no-png-images t)
   :custom-face
@@ -207,6 +207,12 @@
     tab-width 4)
   )
 
+(use-package snakemake-mode
+  :ensure t
+  :mode (("Snakefile\\'" . snakemake-mode)
+          ("\\.smk\\'" . snakemake-mode))
+  )
+
 (use-package ruff-format
   :ensure t
   :hook (python-mode . ruff-format-on-save-mode)
@@ -217,7 +223,8 @@
   :hook ((c-mode . lsp)
           (c++-mode . lsp)
           (rust-mode . lsp)
-          (python-mode . lsp))
+          (python-mode . lsp)
+          (snakemake-mode . lsp))
   :config
   (setq lsp-enable-snippet nil
     lsp-enable-indentation nil
@@ -225,10 +232,20 @@
     lsp-completion-enable-additional-text-edit nil
     lsp-completion-provider :capf
     lsp-completion-show-detail t)
+  (add-to-list 'lsp-language-id-configuration '(snakemake-mode . "python"))
   )
 
 (use-package lsp-ui
   :ensure t
   :config
   (setq lsp-ui-sideline-enable nil)
+  )
+
+(use-package docker
+  :ensure t
+  )
+
+(use-package dockerfile-mode
+  :ensure t
+  :mode ("Dockerfile\\'" . dockerfile-mode)
   )
