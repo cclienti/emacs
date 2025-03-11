@@ -210,6 +210,13 @@
     (c-set-offset 'arglist-intro '+)
     (c-set-offset 'arglist-close 0)))
 
+(use-package gdb-mi
+  :ensure nil
+  :config
+  ;;(setq gdb-many-windows t)
+  (setq gdb-show-main t))
+
+
 (use-package rust-mode
   :ensure t
   :hook (rust-mode . flyspell-prog-mode)
