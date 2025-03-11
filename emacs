@@ -94,6 +94,22 @@
   (display-line-numbers-type 't) ;; 't' (abs), 'relative' or 'visual' (visual-line-mode)
   )
 
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml\\'" "\\.yaml\\'")
+  :hook (yaml-mode . whitespace-mode)
+  :config
+  (setq yaml-indent-offset 2)
+  )
+
+(use-package json-mode
+  :ensure t
+  :mode ("\\.json\\'" "\\.jsonc\\'")
+  :hook (json-mode . (lambda () (setq js-indent-level 2)))
+  :custom
+  (json-reformat:indent-width 2)
+  )
+
 (use-package lisp-mode
   :hook (lisp-mode .
           (lambda ()
