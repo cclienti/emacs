@@ -70,6 +70,21 @@
   (before-save . delete-trailing-whitespace)
   )
 
+(use-package ediff
+  :ensure nil
+  :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  )
+
+(use-package emerge
+  :ensure nil
+  :config
+  (setq emerge-diff-options "--ignore-all-space")
+  (setq emerge-split-window-function 'split-window-horizontally)
+  (setq emerge-window-setup 'same-window)
+  )
+
 (use-package display-line-numbers
   :ensure nil
   :hook
