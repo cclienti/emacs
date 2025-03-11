@@ -35,6 +35,7 @@
 
   ;;(add-to-list 'default-frame-alist '(inhibit-double-buffering . t)) ;; Disable double buffering
   ;;(setq byte-compile-warnings '(not free-vars))  ;; Disable compilation warnings regarding free vars
+  ;;(setq use-package-verbose t)
 
   (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))   ;; Window name
   (setq inhibit-startup-message t) ;; No startup message
@@ -96,10 +97,6 @@
 (use-package flyspell
   :diminish flycheck-mode)
 
-(use-package all-the-icons
-  :ensure t
-  )
-
 (use-package company
   :ensure t
   :diminish company-mode
@@ -110,27 +107,18 @@
 (use-package treemacs
   :ensure t
   :defer t
-  :after (treemacs-all-the-icons)
-  :config
+  ;;:config
   ;;(setq treemacs-no-png-images t)
   :custom-face
   (treemacs-root-face ((t (:height 1.0))))
   (treemacs-file-face ((t (:height 1.0))))
-  )
-
-(use-package treemacs-all-the-icons
-  :ensure t
+  ;;:custom
+  ;;(treemacs-load-all-the-icons-with-workaround-font t)
   )
 
 (use-package treemacs-icons-dired
  :hook (dired-mode . treemacs-icons-dired-enable-once)
  :ensure t)
-
-(use-package lsp-treemacs
-  :after (lsp-mode treemacs)
-  :ensure t
-  :config
-  (lsp-treemacs-sync-mode 1))
 
 (use-package magit
   :ensure t
@@ -234,13 +222,11 @@
   (add-to-list 'lsp-language-id-configuration '(snakemake-mode . "python")))
 
 (use-package lsp-ui
+  :defer t
   :ensure t
   :custom
   (lsp-ui-sideline-enable nil)
-  )
-
-(use-package docker
-  :ensure t
+  (lsp-ui-doc-enable nil)
   )
 
 (use-package dockerfile-mode
