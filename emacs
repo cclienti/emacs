@@ -196,8 +196,7 @@
 
 (use-package rust-mode
   :ensure t
-  :hook ((rust-mode . flyspell-prog-mode)
-         (rust-mode . lsp-deferred)) ;; Enable LSP if available
+  :hook (rust-mode . flyspell-prog-mode)
   :custom
   (rust-format-on-save t) ;; Auto-format code on save
   )
