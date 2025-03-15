@@ -33,10 +33,6 @@
   (unless (file-exists-p custom-file) (write-region "" nil custom-file))
   (load custom-file)
 
-  ;;(add-to-list 'default-frame-alist '(inhibit-double-buffering . t)) ;; Disable double buffering
-  ;;(setq byte-compile-warnings '(not free-vars))  ;; Disable compilation warnings regarding free vars
-  ;;(setq use-package-verbose t)
-
   (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))   ;; Window name
   (setq inhibit-startup-message t) ;; No startup message
   (setq max-lisp-eval-depth 20000) ;; Increase Emacs eval depth buffer
@@ -126,7 +122,8 @@
   )
 
 (use-package flyspell
-  :diminish flycheck-mode)
+  :diminish flycheck-mode
+  )
 
 (use-package company
   :ensure t
@@ -138,6 +135,7 @@
 (use-package treemacs
   :ensure t
   :defer t
+  :bind (("<f2>" . treemacs-next-workspace))
   ;;:config
   ;;(setq treemacs-no-png-images t)
   :custom-face
@@ -148,8 +146,9 @@
   )
 
 (use-package treemacs-icons-dired
- :hook (dired-mode . treemacs-icons-dired-enable-once)
- :ensure t)
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t
+  )
 
 (use-package magit
   :ensure t
@@ -208,14 +207,25 @@
     (c-set-offset 'substatement-open 0)
     (c-set-offset 'brace-list-open 0)
     (c-set-offset 'arglist-intro '+)
-    (c-set-offset 'arglist-close 0)))
+    (c-set-offset 'arglist-close 0))
+  )
+
+(use-package cmake-mode
+  :ensure t
+  :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'")
+  :hook ((cmake-mode .
+           (lambda ()
+             (setq indent-tabs-mode nil)
+             (setq tab-width 4)
+             (setq cmake-tab-width 4))))
+  )
 
 (use-package gdb-mi
   :ensure nil
   :config
   ;;(setq gdb-many-windows t)
-  (setq gdb-show-main t))
-
+  (setq gdb-show-main t)
+  )
 
 (use-package rust-mode
   :ensure t
@@ -228,7 +238,8 @@
   :hook (python-mode . flyspell-prog-mode)
   :custom
   (indent-tabs-mode nil) ;; Use spaces instead of tabs
-  (tab-width 4))         ;; Set tab width to 4 spaces
+  (tab-width 4)          ;; Set tab width to 4 spaces
+  )
 
 (use-package snakemake-mode
   :ensure t
@@ -256,7 +267,8 @@
   (lsp-completion-provider :capf)          ;; Use `capf` for completion
   (lsp-completion-show-detail t)           ;; Show completion details
   :config
-  (add-to-list 'lsp-language-id-configuration '(snakemake-mode . "python")))
+  (add-to-list 'lsp-language-id-configuration '(snakemake-mode . "python"))
+  )
 
 (use-package lsp-ui
   :defer t
@@ -276,8 +288,10 @@
   :mode ("Jenkinsfile\\'" . groovy-mode)
   :hook (groovy-mode . (lambda ()
                          (setq indent-tabs-mode nil)
-                         (setq groovy-indent-offset 4))))
+                         (setq groovy-indent-offset 4)))
+  )
 
 (use-package jenkinsfile-mode
   :ensure t
-  :mode "Jenkinsfile\\'")
+  :mode "Jenkinsfile\\'"
+  )
