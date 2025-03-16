@@ -295,3 +295,13 @@
   :ensure t
   :mode "Jenkinsfile\\'"
   )
+
+(use-package scad-mode
+  :ensure t
+  :mode ("\\.scad\\'" . scad-mode)
+  :hook ((scad-mode . flyspell-prog-mode)
+          (scad-mode . (lambda ()
+                        (setq indent-tabs-mode nil)
+                        (setq tab-width 4))))
+  :custom
+  (scad-preview-colors t))
