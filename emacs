@@ -249,11 +249,10 @@
 
 (use-package verilog-mode
   :mode ("\\.v\\'" "\\.sv\\'")
-  :hook (
-          (verilog-mode . my-verilog-mode-hook)
-          (before-save . verilog-indent-buffer))
+  :hook (verilog-mode . my-verilog-mode-hook)
   :config
   (defun my-verilog-mode-hook ()
+    (add-hook 'before-save-hook #'verilog-indent-buffer)
     (setq verilog-indent-level             4
           verilog-indent-level-module      4
           verilog-indent-level-declaration 4
