@@ -247,6 +247,27 @@
           ("\\.smk\\'" . snakemake-mode))
   )
 
+(use-package verilog-mode
+  :mode ("\\.v\\'" "\\.sv\\'")
+  :hook (
+          (verilog-mode . my-verilog-mode-hook)
+          (before-save . verilog-indent-buffer))
+  :config
+  (defun my-verilog-mode-hook ()
+    (setq verilog-indent-level             4
+          verilog-indent-level-module      4
+          verilog-indent-level-declaration 4
+          verilog-indent-level-behavioral  4
+          verilog-indent-level-directive   4
+          verilog-case-indent              4
+          verilog-cexp-indent              4
+          verilog-indent-begin-after-if    nil
+          verilog-auto-newline             nil
+          verilog-tab-always-indent        t
+          indent-tabs-mode                 nil
+          tab-width                        4
+          verilog-indent-lists             nil)))
+
 (use-package ruff-format
   :ensure t
   :hook (python-mode . ruff-format-on-save-mode)
