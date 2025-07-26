@@ -301,7 +301,39 @@
   :mode ("\\.scad\\'" . scad-mode)
   :hook ((scad-mode . flyspell-prog-mode)
           (scad-mode . (lambda ()
-                        (setq indent-tabs-mode nil)
-                        (setq tab-width 4))))
+                         (setq indent-tabs-mode nil)
+                         (setq tab-width 4))))
   :custom
-  (scad-preview-colors t))
+  (scad-preview-colors t)
+  )
+
+(use-package copilot
+  :ensure t
+  :config
+  (setq warning-suppress-types '((copilot)))
+  :hook ((prog-mode . copilot-mode)
+          (text-mode . copilot-mode))
+  :bind (("C-c M-f" . copilot-complete)
+          :map copilot-completion-map
+          ("C-g" . 'copilot-clear-overlay)
+          ("M-p" . 'copilot-previous-completion)
+          ("M-n" . 'copilot-next-completion)
+          ("M-<tab>" . 'copilot-accept-completion)
+          ("M-f" . 'copilot-accept-completion-by-word)
+          ("M-RET" . 'copilot-accept-completion-by-line))
+  )
+
+(use-package copilot-chat
+  :ensure t
+  :after copilot
+  :hook ((copilot-completion-mode . copilot-chat-mode))
+  :config
+  (setq copilot-chat-model "gpt-4o-mini")
+  (setq copilot-chat-max-tokens 2048)
+  :custom
+  (copilot-chat-default-directory "~/copilot-chats")
+  )
+
+(use-package transpose-frame
+  :ensure t
+  )
